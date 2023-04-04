@@ -1,6 +1,6 @@
 # sveeeth
 
-A Svelte wrapper built upon [viem](https://github.com/wagmi-dev/viem) that provides helpful store and utility functions.
+A [viem](https://github.com/wagmi-dev/viem) wrapper built for Svelte that provides helpful store and utility functions.
 
 ### Stores
 

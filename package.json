@@ -1,0 +1,19 @@
+{
+  "name": "sveeeth",
+  "description": "A viem wrapper built for Svelte",
+  "version": "0.0.1",
+  "scripts": {
+    "build": "tsup",
+    "clean": "rimraf dist",
+    "lint": "prettier --check src/",
+    "format": "prettier --write src/"
+  },
+  "devDependencies": {
+    "prettier": "^2.8.7",
+    "rimraf": "^4.4.1",
+    "tsup": "^6.7.0"
+  },
+  "dependencies": {
+    "viem": "^0.2.5"
+  }
+}
