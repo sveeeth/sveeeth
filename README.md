@@ -19,7 +19,7 @@ import { connected, account, chain } from "sveeeth";
 - [ ] Connect to a users wallet
 
 ```js
-import { connect } from "sveeeth";
+import { connect } from "sveeeth/util";
 
 const account = await connect();
 ```
