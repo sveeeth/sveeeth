@@ -2,24 +2,98 @@
 
 A [viem](https://github.com/wagmi-dev/viem) wrapper built for Svelte that provides helpful store and utility functions.
 
-### Stores
-
 Reactive stores to access useful connected wallet data.
 
 ```js
-import { connected, account, chain } from "sveeeth";
+import { connect, disconnect, account, network, contract } from "sveeeth";
+import { Metamask, Walletconnect, ... } from "sveeeth/connectors";
+import { mainnet, goerli, ... } from "sveeeth/chains";
 ```
 
-- [ ] **connected:** True if the wallet is connected, false if otherwise.
-- [ ] **account:** The connected account.
-- [ ] **chain:** The connected chain.
+# 🚗 Roadmap
 
-### Helper functions
+- [ ] **connect:** Connect to wallet
+- [ ] **disconnect:** Disconnect from wallet
+- [ ] **switchNetwork:** Switch network
+- [ ] **account:** The connected account details
+- [ ] **network:** The connected network details
+- [ ] **contract:** Create a contract instance
+- [ ] **chains:** Folder with all the chain object constants
+- [ ] **connectors:** Folder with all the connectors to start focus on:
+  - [ ] **Injected**: window.ethereum
+  - [ ] **Metamask**: Think this will be pretty much the same as injected
+  - [ ] **Walletconnect**: However this one works
 
-- [ ] Connect to a users wallet
+# 📕 Docs
 
-```js
-import { connect } from "sveeeth/util";
+## Functions
 
-const account = await connect();
+### `connect({ connector: Connector })`
+
+Connect to wallet, Accepts `connector` argument which is a `Connector` type which could be MetaMask, WalletConnect, Safe etc.
+
+```svelte
+<script>
+  import { connect } from "sveeeth";
+  import { Metamask } from "sveeeth/connectors";
+</script>
+<button on:click={() => connect({ connector: Metamask })}>Connect</button>
+```
+
+### `disconnect()`
+
+```svelte
+<script>
+  import { disconnect } from "sveeeth";
+</script>
+<button on:click={() => connect({ connector: Metamask })}>Connect</button>
+```
+
+### `contract({ address: Address, abi: Abi, sender: Address })`
+
+The contract function returns a store representing the defined contract
+
+```svelte
+<script>
+  import { contract, account } from "sveeeth";
+  import { daiAddress, daiAbi } from "...";
+  
+  $: dai = contract(daiAddress, daiAbi);
+  $: balance = $dai.balanceOf($account.address);
+</script>
+```
+
+### `switchNetwork({ chain: Chain })`
+
+Switch to the specified network.
+
+## Stores
+
+### `account`
+
+Account store that returns an object with the account details. Object contains:
+
+`{ address: Address, isConnected: boolean, isDisconnected: boolean, isConnecting: boolean, connector: Connector }`
+
+```svelte
+<script>
+  import { account, connect } from "sveeeth";
+</script>
+
+{#if $account.isConnected}
+  <p>Account: $account.address</p>
+{:else}
+  <button on:click={() => connect({ connector })}>Connect</button>
+{/if}
+```
+
+### `network`
+
+Store that has the network details in it.
+
+```svelte
+<script>
+  import { network } from "sveeeth";
+  $: ({ chain, chains } = $network);
+</script>
 ```
