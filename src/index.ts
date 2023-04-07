@@ -24,6 +24,7 @@ import {
   getProvider,
   watchAccount,
   watchNetwork,
+  switchNetwork as wagmiSwitchNetwork,
 } from "@wagmi/core";
 import { Abi } from "abitype";
 import { Signer } from "@wagmi/core";
@@ -59,6 +60,11 @@ export const account = writable<Account>({
 export const network = writable<Network>({
   chains: [],
 });
+
+/**
+ * Switch network
+ */
+export const switchNetwork = wagmiSwitchNetwork;
 
 /**
  * Contract store

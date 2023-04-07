@@ -14,7 +14,7 @@ import { mainnet, goerli, ... } from "sveeeth/chains";
 
 - [x] **connect:** Connect to wallet
 - [x] **disconnect:** Disconnect from wallet
-- [ ] **switchNetwork:** Switch network
+- [x] **switchNetwork:** Switch network
 - [x] **account:** The connected account details
 - [x] **network:** The connected network details
 - [x] **contract:** Create a contract instance
