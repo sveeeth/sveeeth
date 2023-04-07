@@ -1,6 +1,6 @@
 # sveeeth
 
-A [viem](https://github.com/wagmi-dev/viem) wrapper built for Svelte that provides helpful store and utility functions.
+A [@wagmi/core](https://www.npmjs.com/package/@wagmi/core) wrapper built for Svelte that provides helpful store and utility functions.
 
 Reactive stores to access useful connected wallet data.
 

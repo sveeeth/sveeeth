@@ -6,7 +6,7 @@
 ██████╔╝░░╚██╔╝░░███████╗███████╗███████╗░░░██║░░░██║░░██║
 ╚═════╝░░░░╚═╝░░░╚══════╝╚══════╝╚══════╝░░░╚═╝░░░╚═╝░░╚═╝
 
-@author GeraldHost, 0xBarbs
+@author GeraldHost, 0xbarbs
 @description A svelte wrapper around wagmi/core
 */
 export { configureChains } from "@wagmi/core";
