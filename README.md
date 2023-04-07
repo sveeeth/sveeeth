@@ -20,21 +20,28 @@ import { mainnet, goerli, ... } from "sveeeth/chains";
 - [x] **contract:** Create a contract instance
 - [x] **chains:** re-exports everything from wagmi/core
 - [x] **connectors:** re-exports everything from wagmi/core
+- [ ] **ens:** adding ens fetching and support 
+  - Making it so you can pass it in in place of an address could be cool. As we are already shimming the contract functions this could be doabled, just check for .eth and convert it to an address in the shim.
+- [ ] **multicall:** Add multicall support
+- [ ] **signing:** Add signing and the typed data signing thing
+- [ ] **contract events:** Extend the return from the `contract(...)` to support event listeners
+  - Something like `contract(...).events.EventName.watch(() => void)` could be interesting
+- [ ] Reexport all the wagmi/core utils and constants
 
 # 📕 Docs
 
 ## Functions
 
-### `connect({ connector: Connector })`
+### `connect(args: ConnectArgs)`
 
 Connect to wallet, Accepts `connector` argument which is a `Connector` type which could be MetaMask, WalletConnect, Safe etc.
 
 ```svelte
 <script>
   import { connect } from "sveeeth";
-  import { Metamask } from "sveeeth/connectors";
+  import { InjectedConnector } from "sveeeth/connectors";
 </script>
-<button on:click={() => connect({ connector: Metamask })}>Connect</button>
+<button on:click={() => connect({ connector: new InjectedConnector() })}>Connect</button>
 ```
 
 ### `disconnect()`
@@ -46,9 +53,9 @@ Connect to wallet, Accepts `connector` argument which is a `Connector` type whic
 <button on:click={() => connect({ connector: Metamask })}>Connect</button>
 ```
 
-### `contract({ address: Address, abi: Abi, sender: Address })`
+### `contract({ address: Address, abi: Abi })`
 
-The contract function returns a store representing the defined contract
+The contract function returns a store representing the state and the contract functions
 
 ```svelte
 <script>
@@ -56,7 +63,8 @@ The contract function returns a store representing the defined contract
   import { daiAddress, daiAbi } from "...";
 
   $: dai = contract(daiAddress, daiAbi);
-  $: balance = $dai.balanceOf($account.address);
+  $: balance = dai.balanceOf($account.address);
+  $: console.log($dai.isLoading);
 </script>
 ```
 
