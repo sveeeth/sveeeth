@@ -1,10 +1,11 @@
-import { defineConfig } from 'tsup'
+import { defineConfig } from "tsup";
 
-import { dependencies } from './package.json'
+import { dependencies } from "./package.json";
 
 export default defineConfig({
-  entry: ["src/index.ts"],
+  entry: ["src/index.ts", "src/connectors.ts", "src/chains.ts", "src/providers.ts"],
   external: Object.keys(dependencies),
-  platform: 'neutral',
+  platform: "neutral",
+  format: "esm",
   clean: true,
 });

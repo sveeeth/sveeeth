@@ -12,17 +12,14 @@ import { mainnet, goerli, ... } from "sveeeth/chains";
 
 # 🚗 Roadmap
 
-- [ ] **connect:** Connect to wallet
-- [ ] **disconnect:** Disconnect from wallet
-- [ ] **switchNetwork:** Switch network
-- [ ] **account:** The connected account details
-- [ ] **network:** The connected network details
-- [ ] **contract:** Create a contract instance
-- [ ] **chains:** Folder with all the chain object constants
-- [ ] **connectors:** Folder with all the connectors to start focus on:
-  - [ ] **Injected**: window.ethereum
-  - [ ] **Metamask**: Think this will be pretty much the same as injected
-  - [ ] **Walletconnect**: However this one works
+- [x] **connect:** Connect to wallet
+- [x] **disconnect:** Disconnect from wallet
+- [x] **switchNetwork:** Switch network
+- [x] **account:** The connected account details
+- [x] **network:** The connected network details
+- [x] **contract:** Create a contract instance
+- [x] **chains:** re-exports everything from wagmi/core
+- [x] **connectors:** re-exports everything from wagmi/core
 
 # 📕 Docs
 
@@ -57,7 +54,7 @@ The contract function returns a store representing the defined contract
 <script>
   import { contract, account } from "sveeeth";
   import { daiAddress, daiAbi } from "...";
-  
+
   $: dai = contract(daiAddress, daiAbi);
   $: balance = $dai.balanceOf($account.address);
 </script>
