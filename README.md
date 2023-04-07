@@ -26,7 +26,7 @@ import { mainnet, goerli, ... } from "sveeeth/chains";
 - [ ] **signing:** Add signing and the typed data signing thing
 - [ ] **contract events:** Extend the return from the `contract(...)` to support event listeners
   - Something like `contract(...).events.EventName.watch(() => void)` could be interesting
-- [ ] Reexport all the wagmi/core utils and constants
+- [x] Re-export all the wagmi/core utils and constants
 
 # 📕 Docs
 

@@ -9,7 +9,7 @@
 @author GeraldHost, 0xbarbs
 @description A svelte wrapper around wagmi/core
 */
-export { configureChains } from "@wagmi/core";
+export * from "@wagmi/core";
 
 import {
   ClientConfig,
