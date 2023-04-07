@@ -1,15 +1,15 @@
 <script lang="ts">
   import sveeeth, {
-    publicProvider,
-    mainnet,
     disconnect,
     connect,
     network,
     account,
     configureChains,
-    InjectedConnector,
     contract,
   } from "../../../../sveeeth";
+  import { mainnet } from "../../../../sveeeth/dist/chains";
+  import { publicProvider } from "../../../../sveeeth/dist/providers";
+  import { InjectedConnector } from "../../../../sveeeth/dist/connectors";
 
   const { provider } = configureChains([mainnet], [publicProvider()]);
 
