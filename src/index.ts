@@ -18,6 +18,7 @@ import {
   GetContractResult,
   createClient,
   fetchSigner,
+  fetchEnsAddress,
   getAccount,
   getContract,
   getNetwork,
@@ -104,7 +105,15 @@ export const contract = <T extends Abi>(contractConfig: GetContractArgs<T>) => {
       [key]: async (...args: any) => {
         const signer = await fetchSigner();
         store.update((x) => ({ ...x, isLoading: true }));
-        const ret = await contractInstance.connect(signer as Signer)[key](...args);
+        const ret = await contractInstance.connect(signer as Signer)[key](
+          // todo: how to work this if the user actually intends to send an ENS as the arg
+          ...(args.map(async (arg: any) => (
+            typeof arg === "string" && arg.endsWith(".eth")
+              ? await fetchEnsAddress({ name: arg }) ?? arg
+              : arg
+            )
+          ))
+        );
         store.update((x) => ({ ...x, isLoading: false }));
         return ret;
       },

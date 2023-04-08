@@ -47,11 +47,11 @@
 
   let daiBalance: bigint;
 
-  const getDaiBalance = async () => {
-    daiBalance = await dai.balanceOf($account.address);
+  const getDaiBalance = async (addressOrEns: string) => {
+    daiBalance = await dai.balanceOf(addressOrEns);
   };
 
-  let ensName: string;
+  let ensName: string | null;
   let ensAvatar: string | null;
 
   $: (async({ address }) => {
@@ -69,7 +69,7 @@
 <hr />
 <h2>Account</h2>
 {#if $account.isConnected}
-  <button on:click={() => disconnect()}>Disconnect</button>
+  <button on:click={disconnect}>Disconnect</button>
 
   <p>address: {$account.address}</p>
   <p>ENS: {ensName}</p>
@@ -79,7 +79,7 @@
   {/if}
 
   <p>
-    DAI balance <button on:click={getDaiBalance}>Get</button>: {#if $dai.isLoading}Loading...{:else}{daiBalance}{/if}
+    DAI balance {ensName && "via ENS"}: <button on:click={() => getDaiBalance(ensName ?? $account.address)}>Get</button>: {#if $dai.isLoading}Loading...{:else}{daiBalance}{/if}
   </p>
 {:else}
   <button on:click={() => connect({ connector: new InjectedConnector() })}>Connect</button>

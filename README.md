@@ -20,8 +20,9 @@ import { mainnet, goerli, ... } from "sveeeth/chains";
 - [x] **contract:** Create a contract instance
 - [x] **chains:** re-exports everything from wagmi/core
 - [x] **connectors:** re-exports everything from wagmi/core
-- [ ] **ens:** adding ens fetching and support 
-  - Making it so you can pass it in in place of an address could be cool. As we are already shimming the contract functions this could be doabled, just check for .eth and convert it to an address in the shim.
+- [x] **ens:** adding ens fetching and support 
+  - [x] Allow ENS to be passed in place of address
+  - [ ] Add edge case support for functions where the ENS should be sent raw (unfetched)
 - [ ] **multicall:** Add multicall support
 - [ ] **signing:** Add signing and the typed data signing thing
 - [ ] **contract events:** Extend the return from the `contract(...)` to support event listeners
