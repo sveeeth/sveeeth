@@ -6,6 +6,8 @@
     account,
     configureChains,
     contract,
+    fetchEnsName,
+    fetchEnsAvatar
   } from "../../../../sveeeth";
   import { mainnet } from "../../../../sveeeth/dist/chains";
   import { publicProvider } from "../../../../sveeeth/dist/providers";
@@ -43,19 +45,39 @@
     ],
   });
 
-  let daiBalance: any;
+  let daiBalance: bigint;
 
   const getDaiBalance = async () => {
     daiBalance = await dai.balanceOf($account.address);
   };
+
+  let ensName: string;
+  let ensAvatar: string | null;
+
+  $: (async({ address }) => {
+    if (address) {
+      [ensName, ensAvatar] = await Promise.all([
+        fetchEnsName({ address }),
+        fetchEnsAvatar({ address })
+      ]);
+    }
+  })($account);
+
 </script>
 
 <h1>Sveeeth Example</h1>
 <hr />
 <h2>Account</h2>
 {#if $account.isConnected}
-  <p>address: {$account.address}</p>
   <button on:click={() => disconnect()}>Disconnect</button>
+
+  <p>address: {$account.address}</p>
+  <p>ENS: {ensName}</p>
+
+  {#if ensAvatar}
+    <img class="avatar" src={ensAvatar} alt={`${ensName} avatar image`}>
+  {/if}
+
   <p>
     DAI balance <button on:click={getDaiBalance}>Get</button>: {#if $dai.isLoading}Loading...{:else}{daiBalance}{/if}
   </p>
@@ -67,3 +89,12 @@
 <h2>Network</h2>
 <p>chain ID: {$network.chain?.id}</p>
 <p>Network name: {$network.chain?.name}</p>
+
+<style>
+  .avatar {
+      width: 100px;
+      height: 100px;
+      border: 1px solid black;
+      border-radius: 50%;
+  }
+</style>
