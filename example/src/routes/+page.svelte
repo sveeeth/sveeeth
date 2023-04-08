@@ -79,7 +79,9 @@
   {/if}
 
   <p>
-    DAI balance {ensName && "via ENS"}: <button on:click={() => getDaiBalance(ensName ?? $account.address)}>Get</button>: {#if $dai.isLoading}Loading...{:else}{daiBalance}{/if}
+    {ensName ? "DAI balance via ENS" : "DAI balance"}:
+    {#if $dai.isLoading}Loading...{:else}{daiBalance}{/if}
+    <button on:click={() => getDaiBalance(ensName ?? $account.address)}>Get</button>
   </p>
 {:else}
   <button on:click={() => connect({ connector: new InjectedConnector() })}>Connect</button>
