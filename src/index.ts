@@ -13,25 +13,26 @@ export * from "@wagmi/core";
 
 import {
   ClientConfig,
+  connect as wagmiConnect,
   ConnectArgs,
-  GetContractArgs,
-  GetContractResult,
   createClient,
+  disconnect as wagmiDisconnect,
   fetchSigner,
-  fetchEnsAddress,
   getAccount,
   getContract,
+  GetContractArgs,
+  GetContractResult,
   getNetwork,
   getProvider,
+  Signer,
+  switchNetwork as wagmiSwitchNetwork,
   watchAccount,
   watchNetwork,
-  switchNetwork as wagmiSwitchNetwork,
 } from "@wagmi/core";
 import { Abi } from "abitype";
-import { Signer } from "@wagmi/core";
 import { writable } from "svelte/store";
-import { connect as wagmiConnect, disconnect as wagmiDisconnect } from "@wagmi/core";
 
+import { addressOrEns, getAbiFunction } from "./utils";
 import { Account, Network } from "./types";
 
 /**
@@ -103,22 +104,19 @@ export const contract = <T extends Abi>(contractConfig: GetContractArgs<T>) => {
     (acc, key) => ({
       ...acc,
       [key]: async (...args: any) => {
+        const fn = getAbiFunction(contractConfig.abi, key);
         const signer = await fetchSigner();
         store.update((x) => ({ ...x, isLoading: true }));
         const ret = await contractInstance.connect(signer as Signer)[key](
-          // todo: how to work this if the user actually intends to send an ENS as the arg
-          ...(args.map(async (arg: any) => (
-            typeof arg === "string" && arg.endsWith(".eth")
-              ? await fetchEnsAddress({ name: arg }) ?? arg
-              : arg
-            )
-          ))
+          ...args.map(async (arg: any, index: number) => (
+            fn?.inputs[index].type === "address" ? await addressOrEns(arg) : arg
+          )),
         );
         store.update((x) => ({ ...x, isLoading: false }));
         return ret;
       },
     }),
-    {} as GetContractResult<T>["functions"]
+    {} as GetContractResult<T>["functions"],
   );
 
   // Return the store/contract object
