@@ -12,6 +12,7 @@
   import { mainnet } from "../../../../sveeeth/dist/chains";
   import { publicProvider } from "../../../../sveeeth/dist/providers";
   import { InjectedConnector } from "../../../../sveeeth/dist/connectors";
+  import daiExampleAbi from "../abis/dai.example.json";
 
   const { provider } = configureChains([mainnet], [publicProvider()]);
 
@@ -22,45 +23,25 @@
 
   const dai = contract({
     address: "0x6b175474e89094c44da98b954eedeac495271d0f",
-    abi: [
-      {
-        constant: true,
-        inputs: [
-          {
-            name: "_owner",
-            type: "address",
-          },
-        ],
-        name: "balanceOf",
-        outputs: [
-          {
-            name: "balance",
-            type: "uint256",
-          },
-        ],
-        payable: false,
-        stateMutability: "view",
-        type: "function",
-      },
-    ],
+    abi: daiExampleAbi,
   });
 
+  /**
+   * DAI
+   */
   let daiBalance: bigint;
 
   const getDaiBalance = async (addressOrEns: string) => {
     daiBalance = await dai.balanceOf(addressOrEns);
   };
 
-  let ensName: string | null;
-  let ensAvatar: string | null;
+  /**
+   * ENS
+   */
+  let ensName: string | null = null;
 
   $: (async({ address }) => {
-    if (address) {
-      [ensName, ensAvatar] = await Promise.all([
-        fetchEnsName({ address }),
-        fetchEnsAvatar({ address })
-      ]);
-    }
+    ensName = address ? await fetchEnsName({ address }) : null;
   })($account);
 
 </script>
@@ -72,11 +53,13 @@
   <button on:click={disconnect}>Disconnect</button>
 
   <p>address: {$account.address}</p>
-  <p>ENS: {ensName}</p>
+  <p>ENS: {ensName ?? "none"}</p>
 
-  {#if ensAvatar}
-    <img class="avatar" src={ensAvatar} alt={`${ensName} avatar image`}>
-  {/if}
+  {#await fetchEnsAvatar({ address: $account.address }) then ensAvatar}
+    {#if ensAvatar}
+      <img class="avatar" src={ensAvatar} alt={`${ensName} avatar image`}>
+    {/if}
+  {/await}
 
   <p>
     {ensName ? "DAI balance via ENS" : "DAI balance"}:
