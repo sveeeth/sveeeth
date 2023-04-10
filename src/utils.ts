@@ -36,7 +36,7 @@ export const getAbiFunction = (abi: Abi, name: String): AbiFunction | undefined 
 };
 
 export type FetchEnsDataArgs = {
-  address: Address
+  address: Address | null
   chainId?: number
 }
 export type FetchEnsDataResult = {
@@ -53,6 +53,10 @@ export type FetchEnsDataResult = {
  * @returns A Promise that resolves to an array of two strings, the ENS name and avatar.
  */
 export const fetchEnsData = async ({ address, chainId }: FetchEnsDataArgs): Promise<FetchEnsDataResult> => {
+  if (!address) {
+    return { name: null, avatar: null };
+  }
+
   const [name, avatar] = await Promise.all([
     fetchEnsName({ address, chainId }),
     fetchEnsAvatar({ address, chainId }),
