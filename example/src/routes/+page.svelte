@@ -10,9 +10,9 @@
   import { mainnet } from "../../../../sveeeth/dist/chains";
   import { publicProvider } from "../../../../sveeeth/dist/providers";
   import { InjectedConnector } from "../../../../sveeeth/dist/connectors";
+  import { fetchEnsData } from "../../../../sveeeth/dist/utils";
   import daiExampleAbi from "../abis/dai.example.json";
 
-  const { ens: accountEns } = account;
   const { provider } = configureChains([mainnet], [publicProvider()]);
 
   sveeeth({
@@ -43,7 +43,7 @@
 
   <p>address: {$account.address}</p>
 
-  {#await $accountEns}
+  {#await fetchEnsData($account)}
     <p>ENS: Loading...</p>
   {:then { name, avatar }}
     <p>ENS: {name}</p>

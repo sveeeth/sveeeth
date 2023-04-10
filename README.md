@@ -106,22 +106,6 @@ Account store that returns an object with the account details. Object contains:
 {/if}
 ```
 
-The account store exposes a derived `ens` store that can be destructured and used reactively to asynchronously fetch the connected account ENS data.
-
-```svelte
-<script>
-  import { account } from "sveeeth";
-  
-  const { ens } = account;
-</script>
-
-{#await $ens}
-  <p>Loading...</p>
-{:then { name, avatar }}
-  <p>Fetched: {name}, {avatar}</p>
-{/await}
-```
-
 ### `network`
 
 Store that has the network details in it.
