@@ -30,9 +30,9 @@ import {
   watchNetwork,
 } from "@wagmi/core";
 import { Abi } from "abitype";
-import { writable } from "svelte/store";
+import { get, Readable, writable } from "svelte/store";
 
-import { addressOrEns, getAbiFunction } from "./utils";
+import { addressOrEns, fetchEnsData, FetchEnsDataResult, getAbiFunction } from "./utils";
 import { Account, Network } from "./types";
 
 /**
@@ -48,13 +48,36 @@ export const disconnect = () => wagmiDisconnect();
 /**
  * Account store
  */
-export const account = writable<Account>({
+const accountStore = writable<Account>({
   address: null,
   isConnected: null,
   isReconnecting: null,
   isDisconnected: null,
   status: null,
 });
+
+export interface AccountStore extends Readable<Account> {
+  ens: () => Promise<FetchEnsDataResult>;
+}
+
+function createAccount(): AccountStore {
+  const { subscribe } = accountStore;
+
+  const ens = async () => {
+    const { address } = get(accountStore);
+    return address && await fetchEnsData({ address }) || {
+      name: null,
+      avatar: null,
+    };
+  };
+
+  return {
+    ens,
+    subscribe,
+  }
+}
+
+export const account: AccountStore = createAccount();
 
 /**
  * Network store
@@ -132,12 +155,12 @@ export const contract = <T extends Abi>(contractConfig: GetContractArgs<T>) => {
 export default (clientConfig: ClientConfig) => {
   createClient(clientConfig);
 
-  const acc = getAccount();
-  if (acc) account.set(acc as Account);
-
   const net = getNetwork();
   if (net) network.set(net as Network);
 
-  watchAccount((acc) => account.set(acc as Account));
+  const acc = getAccount();
+  if (acc) accountStore.set(acc as Account);
+
+  watchAccount((acc) => accountStore.set(acc as Account));
   watchNetwork((net) => network.set(net as Network));
 };

@@ -6,8 +6,6 @@
     account,
     configureChains,
     contract,
-    fetchEnsName,
-    fetchEnsAvatar
   } from "../../../../sveeeth";
   import { mainnet } from "../../../../sveeeth/dist/chains";
   import { publicProvider } from "../../../../sveeeth/dist/providers";
@@ -34,16 +32,6 @@
   const getDaiBalance = async (addressOrEns: string) => {
     daiBalance = await dai.balanceOf(addressOrEns);
   };
-
-  /**
-   * ENS
-   */
-  let ensName: string | null = null;
-
-  $: (async({ address }) => {
-    ensName = address ? await fetchEnsName({ address }) : null;
-  })($account);
-
 </script>
 
 <h1>Sveeeth Example</h1>
@@ -53,18 +41,19 @@
   <button on:click={disconnect}>Disconnect</button>
 
   <p>address: {$account.address}</p>
-  <p>ENS: {ensName ?? "none"}</p>
 
-  {#await fetchEnsAvatar({ address: $account.address }) then ensAvatar}
-    {#if ensAvatar}
-      <img class="avatar" src={ensAvatar} alt={`${ensName} avatar image`}>
-    {/if}
+  <!-- todo: this isnt reactive -->
+  {#await account.ens()}
+    <p>ENS: Loading...</p>
+  {:then {name, avatar}}
+    <p>ENS: {name}</p>
+    <img class="avatar" src={avatar} alt={`${name} avatar image`}>
   {/await}
 
   <p>
-    {ensName ? "DAI balance via ENS" : "DAI balance"}:
+    DAI balance:
     {#if $dai.isLoading}Loading...{:else}{daiBalance}{/if}
-    <button on:click={() => getDaiBalance(ensName ?? $account.address)}>Get</button>
+    <button on:click={() => getDaiBalance($account.address)}>Get</button>
   </p>
 {:else}
   <button on:click={() => connect({ connector: new InjectedConnector() })}>Connect</button>
