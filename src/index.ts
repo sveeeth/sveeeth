@@ -30,7 +30,7 @@ import {
   watchNetwork,
 } from "@wagmi/core";
 import { Abi } from "abitype";
-import { get, Readable, writable } from "svelte/store";
+import { Readable, Writable, writable } from "svelte/store";
 
 import { addressOrEns, fetchEnsData, FetchEnsDataResult, getAbiFunction } from "./utils";
 import { Account, Network } from "./types";
@@ -57,19 +57,23 @@ const accountStore = writable<Account>({
 });
 
 export interface AccountStore extends Readable<Account> {
-  ens: () => Promise<FetchEnsDataResult>;
+  ens: Writable<Promise<FetchEnsDataResult>>;
 }
 
 function createAccount(): AccountStore {
   const { subscribe } = accountStore;
 
-  const ens = async () => {
-    const { address } = get(accountStore);
-    return address && await fetchEnsData({ address }) || {
-      name: null,
-      avatar: null,
-    };
-  };
+  const ens = writable<Promise<FetchEnsDataResult>>();
+
+  // Subscribe to the accountStore and update the fetchEnsData promise. This
+  // promise is not consumed unless specified, preventing unnecessary requests.
+  accountStore.subscribe(account => {
+    const { address } = account;
+
+    (async () => {
+      address && ens.set(fetchEnsData({ address }));
+    })();
+  })
 
   return {
     ens,

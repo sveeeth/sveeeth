@@ -12,6 +12,7 @@
   import { InjectedConnector } from "../../../../sveeeth/dist/connectors";
   import daiExampleAbi from "../abis/dai.example.json";
 
+  const { ens: accountEns } = account;
   const { provider } = configureChains([mainnet], [publicProvider()]);
 
   sveeeth({
@@ -42,12 +43,14 @@
 
   <p>address: {$account.address}</p>
 
-  <!-- todo: this isnt reactive -->
-  {#await account.ens()}
+  {#await $accountEns}
     <p>ENS: Loading...</p>
-  {:then {name, avatar}}
+  {:then { name, avatar }}
     <p>ENS: {name}</p>
-    <img class="avatar" src={avatar} alt={`${name} avatar image`}>
+
+    {#if avatar}
+      <img class="avatar" src={avatar} alt={`${name} avatar image`}>
+    {/if}
   {/await}
 
   <p>
