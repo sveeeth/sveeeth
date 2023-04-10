@@ -12,28 +12,28 @@
 export * from "@wagmi/core";
 
 import {
-  ClientConfig,
-  connect as wagmiConnect,
-  ConnectArgs,
   createClient,
-  disconnect as wagmiDisconnect,
-  fetchSigner,
-  getAccount,
-  getContract,
-  GetContractArgs,
-  GetContractResult,
-  getNetwork,
   getProvider,
-  Signer,
-  switchNetwork as wagmiSwitchNetwork,
+  getAccount,
+  getNetwork,
   watchAccount,
   watchNetwork,
+  fetchSigner,
+  getContract,
+  Signer,
+  ClientConfig,
+  ConnectArgs,
+  GetContractArgs,
+  GetContractResult,
+  connect as wagmiConnect,
+  disconnect as wagmiDisconnect,
+  switchNetwork as wagmiSwitchNetwork,
 } from "@wagmi/core";
 import { Abi } from "abitype";
 import { Readable, writable } from "svelte/store";
 
-import { addressOrEns, getAbiFunction } from "./utils";
 import { Account, Network } from "./types";
+import { addressOrEns, getAbiFunction } from "./utils";
 
 /**
  * Connect
@@ -56,14 +56,17 @@ const accountStore = writable<Account>({
   status: null,
 });
 
-function createAccount(): Readable<Account> {
-  const { subscribe } = accountStore;
+/**
+ * Create account
+ * @returns obj Readable store
+ */
+const createAccount = (): Readable<Account> => ({
+  subscribe: accountStore.subscribe,
+});
 
-  return {
-    subscribe,
-  }
-}
-
+/**
+ * The readable account store
+ */
 export const account = createAccount();
 
 /**
@@ -90,7 +93,7 @@ export const switchNetwork = wagmiSwitchNetwork;
  * <script>
  *    let daiBalance;
  *    const dai = contract({ address, abi });
- *    const getDaiBalance = (acc: Address) => {
+ *    const getDaiBalance = async (acc: Address) => {
  *      daiBalance = await dai.balanceOf(acc);
  *    }
  * </script>
@@ -103,9 +106,9 @@ export const contract = <T extends Abi>(contractConfig: GetContractArgs<T>) => {
   // Setup all the things
   const provider = getProvider();
   const contractInstance = getContract<T>({ ...contractConfig, signerOrProvider: provider });
-  const store = writable({
-    isLoading: false,
-  });
+  const store = writable({ isLoading: false });
+
+  const setIsLoading = (isLoading: boolean) => store.update((x) => ({ ...x, isLoading }));
 
   // Loop through each key of the functions property and return their
   // associated contract instance value, wrapped in a shim that updates
@@ -114,19 +117,23 @@ export const contract = <T extends Abi>(contractConfig: GetContractArgs<T>) => {
     (acc, key) => ({
       ...acc,
       [key]: async (...args: any) => {
+        setIsLoading(true);
+
         const fn = getAbiFunction(contractConfig.abi, key);
-        const signer = await fetchSigner();
-        store.update((x) => ({ ...x, isLoading: true }));
-        const ret = await contractInstance.connect(signer as Signer)[key](
-          ...args.map(async (arg: any, index: number) => (
+        const parsedArgs = await Promise.all(
+          args.map(async (arg: any, index: number) =>
             fn?.inputs[index].type === "address" ? await addressOrEns(arg) : arg
-          )),
+          )
         );
-        store.update((x) => ({ ...x, isLoading: false }));
+
+        const signer = await fetchSigner();
+        const ret = await contractInstance.connect(signer as Signer)[key](...parsedArgs);
+
+        setIsLoading(false);
         return ret;
       },
     }),
-    {} as GetContractResult<T>["functions"],
+    {} as GetContractResult<T>["functions"]
   );
 
   // Return the store/contract object
