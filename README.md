@@ -22,7 +22,8 @@ import { mainnet, goerli, ... } from "sveeeth/chains";
 - [x] **connectors:** re-exports everything from wagmi/core
 - [x] **ens:** adding ens fetching and support 
   - [x] Allow ENS to be passed in place of address
-  - [ ] Add edge case support for functions where the ENS should be sent raw (unfetched)
+  - [x] Add edge case support for functions where the ENS should be sent raw (unfetched)
+  - [x] Reactive fetching of connected account ens data
 - [ ] **multicall:** Add multicall support
 - [ ] **signing:** Add signing and the typed data signing thing
 - [ ] **contract events:** Extend the return from the `contract(...)` to support event listeners
@@ -91,6 +92,22 @@ Account store that returns an object with the account details. Object contains:
 {:else}
   <button on:click={() => connect({ connector })}>Connect</button>
 {/if}
+```
+
+The account store exposes an `ens` field that can be destructured and used reactively to asynchronously fetch the connected account ENS data.
+
+```svelte
+<script>
+  import { account } from "sveeeth";
+  
+  const { ens } = account;
+</script>
+
+{#await $ens}
+  <p>Loading...</p>
+{:then { name, avatar }}
+  <p>Fetched: {name}, {avatar}</p>
+{/await}
 ```
 
 ### `network`
