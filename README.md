@@ -24,7 +24,7 @@ import { mainnet, goerli, ... } from "sveeeth/chains";
   - [x] Allow ENS to be passed in place of address
   - [x] Add edge case support for functions where the ENS should be sent raw (unfetched)
   - [ ] Reactive fetching of connected account ens data
-- [ ] **multicall:** Add multicall support
+- [x] **multicall:** Add multicall support
 - [ ] **signing:** Add signing and the typed data signing thing
 - [ ] **contract events:** Extend the return from the `contract(...)` to support event listeners
   - Something like `contract(...).events.EventName.watch(() => void)` could be interesting
