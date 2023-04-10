@@ -6,31 +6,33 @@
 ██████╔╝░░╚██╔╝░░███████╗███████╗███████╗░░░██║░░░██║░░██║
 ╚═════╝░░░░╚═╝░░░╚══════╝╚══════╝╚══════╝░░░╚═╝░░░╚═╝░░╚═╝
 
-@author GeraldHost, 0xBarbs
+@author GeraldHost, 0xbarbs
 @description A svelte wrapper around wagmi/core
 */
-export { configureChains } from "@wagmi/core";
+export * from "@wagmi/core";
 
 import {
   ClientConfig,
+  connect as wagmiConnect,
   ConnectArgs,
-  GetContractArgs,
-  GetContractResult,
   createClient,
+  disconnect as wagmiDisconnect,
   fetchSigner,
   getAccount,
   getContract,
+  GetContractArgs,
+  GetContractResult,
   getNetwork,
   getProvider,
+  Signer,
+  switchNetwork as wagmiSwitchNetwork,
   watchAccount,
   watchNetwork,
-  switchNetwork as wagmiSwitchNetwork,
 } from "@wagmi/core";
 import { Abi } from "abitype";
-import { Signer } from "@wagmi/core";
-import { writable } from "svelte/store";
-import { connect as wagmiConnect, disconnect as wagmiDisconnect } from "@wagmi/core";
+import { Readable, writable } from "svelte/store";
 
+import { addressOrEns, getAbiFunction } from "./utils";
 import { Account, Network } from "./types";
 
 /**
@@ -46,13 +48,23 @@ export const disconnect = () => wagmiDisconnect();
 /**
  * Account store
  */
-export const account = writable<Account>({
+const accountStore = writable<Account>({
   address: null,
   isConnected: null,
   isReconnecting: null,
   isDisconnected: null,
   status: null,
 });
+
+function createAccount(): Readable<Account> {
+  const { subscribe } = accountStore;
+
+  return {
+    subscribe,
+  }
+}
+
+export const account = createAccount();
 
 /**
  * Network store
@@ -102,14 +114,19 @@ export const contract = <T extends Abi>(contractConfig: GetContractArgs<T>) => {
     (acc, key) => ({
       ...acc,
       [key]: async (...args: any) => {
+        const fn = getAbiFunction(contractConfig.abi, key);
         const signer = await fetchSigner();
         store.update((x) => ({ ...x, isLoading: true }));
-        const ret = await contractInstance.connect(signer as Signer)[key](...args);
+        const ret = await contractInstance.connect(signer as Signer)[key](
+          ...args.map(async (arg: any, index: number) => (
+            fn?.inputs[index].type === "address" ? await addressOrEns(arg) : arg
+          )),
+        );
         store.update((x) => ({ ...x, isLoading: false }));
         return ret;
       },
     }),
-    {} as GetContractResult<T>["functions"]
+    {} as GetContractResult<T>["functions"],
   );
 
   // Return the store/contract object
@@ -125,12 +142,12 @@ export const contract = <T extends Abi>(contractConfig: GetContractArgs<T>) => {
 export default (clientConfig: ClientConfig) => {
   createClient(clientConfig);
 
-  const acc = getAccount();
-  if (acc) account.set(acc as Account);
-
   const net = getNetwork();
   if (net) network.set(net as Network);
 
-  watchAccount((acc) => account.set(acc as Account));
+  const acc = getAccount();
+  if (acc) accountStore.set(acc as Account);
+
+  watchAccount((acc) => accountStore.set(acc as Account));
   watchNetwork((net) => network.set(net as Network));
 };

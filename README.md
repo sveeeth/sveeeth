@@ -1,6 +1,6 @@
 # sveeeth
 
-A [viem](https://github.com/wagmi-dev/viem) wrapper built for Svelte that provides helpful store and utility functions.
+A [@wagmi/core](https://www.npmjs.com/package/@wagmi/core) wrapper built for Svelte that provides helpful store and utility functions.
 
 Reactive stores to access useful connected wallet data.
 
@@ -20,13 +20,15 @@ import { mainnet, goerli, ... } from "sveeeth/chains";
 - [x] **contract:** Create a contract instance
 - [x] **chains:** re-exports everything from wagmi/core
 - [x] **connectors:** re-exports everything from wagmi/core
-- [ ] **ens:** adding ens fetching and support 
-  - Making it so you can pass it in in place of an address could be cool. As we are already shimming the contract functions this could be doabled, just check for .eth and convert it to an address in the shim.
+- [x] **ens:** adding ens fetching and support 
+  - [x] Allow ENS to be passed in place of address
+  - [x] Add edge case support for functions where the ENS should be sent raw (unfetched)
+  - [ ] Reactive fetching of connected account ens data
 - [ ] **multicall:** Add multicall support
 - [ ] **signing:** Add signing and the typed data signing thing
 - [ ] **contract events:** Extend the return from the `contract(...)` to support event listeners
   - Something like `contract(...).events.EventName.watch(() => void)` could be interesting
-- [ ] Reexport all the wagmi/core utils and constants
+- [x] Re-export all the wagmi/core utils and constants
 
 # 📕 Docs
 
@@ -65,6 +67,18 @@ The contract function returns a store representing the state and the contract fu
   $: dai = contract(daiAddress, daiAbi);
   $: balance = dai.balanceOf($account.address);
   $: console.log($dai.isLoading);
+</script>
+```
+
+An ENS name can be passed to a function in place of an address and it will be automatically fetched before the function is called.
+
+```svelte
+<script>
+  // instead of this
+  const balance = dai.balanceOf("0x360EF498A774998900da14E81b86E9200A400ecf");
+  
+  // we can do this
+  const balance = dai.balanceOf("bbque.eth");
 </script>
 ```
 
