@@ -5,8 +5,10 @@ import {
   Signer,
   GetContractArgs,
   GetContractResult,
+  watchContractEvent,
+  WatchContractEventCallback,
 } from "@wagmi/core";
-import { Abi } from "abitype";
+import { Abi, Address } from "abitype";
 import { writable } from "svelte/store";
 
 import { addressOrEns, getAbiFunction } from "./utils";
@@ -31,11 +33,25 @@ import { addressOrEns, getAbiFunction } from "./utils";
  * {#if $dai.isLoading}Loading...{:else}{daiBalance}{/if}
  * <button on:click={getDaiBalance}>Get balance</button>
  * ```
+ *
+ * Contracts also support event listeners
+ *
+ * Example:
+ *
+ * ```ts
+ * <script>
+ *    const dai = contract({ address, abi });
+ *
+ *    onMount(() => {
+ *      dai.events.Transfer((...args) => { ... });
+ *    });
+ * </script>
+ * ```
  */
-export const contract = <T extends Abi>(contractConfig: GetContractArgs<T>) => {
+export const contract = <TAbi extends Abi>(contractConfig: GetContractArgs<TAbi>) => {
   // Setup all the things
   const provider = getProvider();
-  const contractInstance = getContract<T>({ ...contractConfig, signerOrProvider: provider });
+  const contractInstance = getContract<TAbi>({ ...contractConfig, signerOrProvider: provider });
   const store = writable({ isLoading: false });
 
   const setIsLoading = (isLoading: boolean) => store.update((x) => ({ ...x, isLoading }));
@@ -43,7 +59,9 @@ export const contract = <T extends Abi>(contractConfig: GetContractArgs<T>) => {
   // Loop through each key of the functions property and return their
   // associated contract instance value, wrapped in a shim that updates
   // isLoading on the store
-  const shimmed: GetContractResult<T>["functions"] = Object.keys(contractInstance.functions).reduce(
+  const functions: GetContractResult<TAbi>["functions"] = Object.keys(
+    contractInstance.functions
+  ).reduce(
     (acc, key) => ({
       ...acc,
       [key]: async (...args: any) => {
@@ -63,9 +81,25 @@ export const contract = <T extends Abi>(contractConfig: GetContractArgs<T>) => {
         return ret;
       },
     }),
-    {} as GetContractResult<T>["functions"]
+    {} as GetContractResult<TAbi>["functions"]
+  );
+
+  const events: GetContractResult<TAbi>["filters"] = Object.keys(contractInstance.filters).reduce(
+    (acc, key: string) => ({
+      ...acc,
+      [key]: (fn: WatchContractEventCallback<TAbi, any>) =>
+        watchContractEvent(
+          {
+            address: contractConfig.address as Address,
+            abi: contractConfig.abi,
+            eventName: key as any,
+          },
+          fn
+        ),
+    }),
+    {}
   );
 
   // Return the store/contract object
-  return { ...store, ...shimmed };
+  return { ...store, ...functions, events };
 };
