@@ -70,6 +70,18 @@ The contract function returns a store representing the state and the contract fu
 </script>
 ```
 
+An ENS name can be passed to a function in place of an address and it will be automatically fetched before the function is called.
+
+```svelte
+<script>
+  // instead of this
+  const balance = dai.balanceOf("0x360EF498A774998900da14E81b86E9200A400ecf");
+  
+  // we can do this
+  const balance = dai.balanceOf("bbque.eth");
+</script>
+```
+
 ### `switchNetwork({ chain: Chain })`
 
 Switch to the specified network.
