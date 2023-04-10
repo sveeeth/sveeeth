@@ -30,15 +30,14 @@ export const addressOrEns = async (addressOrEns: string): Promise<string | null>
  *          such function is found.
  */
 export const getAbiFunction = (abi: Abi, name: String): AbiFunction | undefined => {
-  return abi.find(
-    fn => fn.type === "function" && fn.name === name,
-  ) as AbiFunction | undefined;
+  return abi.find((fn) => fn.type === "function" && fn.name === name) as AbiFunction | undefined;
 };
 
 export type FetchEnsDataArgs = {
-  address: Address | null
-  chainId?: number
-}
+  address: Address | null;
+  chainId?: number;
+};
+
 export type FetchEnsDataResult = {
   name: Nullable<string>;
   avatar: Nullable<string>;
@@ -52,7 +51,10 @@ export type FetchEnsDataResult = {
  *
  * @returns A Promise that resolves to an array of two strings, the ENS name and avatar.
  */
-export const fetchEnsData = async ({ address, chainId }: FetchEnsDataArgs): Promise<FetchEnsDataResult> => {
+export const fetchEnsData = async ({
+  address,
+  chainId,
+}: FetchEnsDataArgs): Promise<FetchEnsDataResult> => {
   if (!address) {
     return { name: null, avatar: null };
   }
