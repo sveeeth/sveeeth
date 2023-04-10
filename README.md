@@ -106,7 +106,7 @@ Account store that returns an object with the account details. Object contains:
 {/if}
 ```
 
-The account store exposes an `ens` field that can be destructured and used reactively to asynchronously fetch the connected account ENS data.
+The account store exposes a derived `ens` store that can be destructured and used reactively to asynchronously fetch the connected account ENS data.
 
 ```svelte
 <script>
