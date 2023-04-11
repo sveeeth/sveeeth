@@ -17,9 +17,11 @@
     "tsup": "^6.7.0"
   },
   "dependencies": {
-    "@wagmi/core": "^0.10.9",
     "abitype": "^0.7.1",
     "svelte": "^3.58.0",
     "typescript": "^5.0.3"
+  },
+  "peerDependencies": {
+    "@wagmi/core": "^0.10.9"
   }
 }
