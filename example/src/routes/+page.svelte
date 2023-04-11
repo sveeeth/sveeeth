@@ -23,9 +23,11 @@
     abi: daiExampleAbi as Abi,
   };
 
+  const { provider } = configureChains([mainnet], [publicProvider()]);
+
   sveeeth({
     autoConnect: true,
-    ...configureChains([mainnet], [publicProvider()]),
+    provider,
   });
 
   const dai = contract(daiConfig);
