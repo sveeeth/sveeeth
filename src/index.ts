@@ -11,6 +11,7 @@
 */
 export * from "@wagmi/core";
 export * from "./contract";
+export * from "./signer";
 
 import {
   createClient,
