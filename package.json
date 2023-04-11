@@ -1,33 +1,66 @@
 {
   "name": "sveeeth",
+  "type": "module",
   "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "description": "A viem wrapper built for Svelte",
+  "types": "./dist/index.d.ts",
+  "description": "A wagmi/core wrapper built for Svelte",
   "version": "0.0.1",
   "scripts": {
-    "build": "tsup --dts --format esm,cjs",
-    "build:watch": "tsup --dts --format esm,cjs --watch",
+    "build": "tsup",
+    "build:watch": "tsup --watch",
     "clean": "rimraf dist",
     "format:check": "prettier --check src/",
     "format": "prettier --write src/",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "prepare": "npm run build"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.58.0",
     "@typescript-eslint/parser": "^5.58.0",
     "eslint": "^8.38.0",
+    "@wagmi/core": "^0.10.9",
+    "dedent": "^0.7.0",
+    "fs-extra": "^11.1.1",
     "prettier": "^2.8.7",
     "rimraf": "^4.4.1",
-    "tsup": "^6.7.0",
-    "@wagmi/core": "^0.10.9"
+    "tsup": "^6.7.0"
   },
   "dependencies": {
-    "abitype": "^0.7.1",
     "svelte": "^3.58.0",
     "typescript": "^5.0.3"
   },
   "peerDependencies": {
     "@wagmi/core": "^0.10.9"
+  },
+  "files": [
+    "/connectors",
+    "/chains",
+    "/providers",
+    "/utils",
+    "/dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./connectors": {
+      "types": "./dist/connectors.d.ts",
+      "default": "./dist/connectors.js"
+    },
+    "./chains": {
+      "types": "./dist/chains.d.ts",
+      "default": "./dist/chains.js"
+    },
+    "./providers": {
+      "types": "./dist/providers.d.ts",
+      "default": "./dist/providers.js"
+    },
+    "./utils": {
+      "types": "./dist/utils.d.ts",
+      "default": "./dist/utils.js"
+    },
+    "./package.json": "./package.json"
   }
 }

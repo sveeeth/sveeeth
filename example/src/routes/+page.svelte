@@ -10,11 +10,11 @@
     contract,
     multicall,
     createSigner,
-  } from "../../../../sveeeth";
-  import { mainnet } from "../../../../sveeeth/dist/chains";
-  import { publicProvider } from "../../../../sveeeth/dist/providers";
-  import { InjectedConnector } from "../../../../sveeeth/dist/connectors";
-  import { fetchEnsData } from "../../../../sveeeth/dist/utils";
+  } from "sveeeth";
+  import { mainnet } from "sveeeth/chains";
+  import { publicProvider } from "sveeeth/providers";
+  import { InjectedConnector } from "sveeeth/connectors";
+  import { fetchEnsData } from "sveeeth/utils";
 
   import daiExampleAbi from "../abis/erc20.json";
 
@@ -23,9 +23,11 @@
     abi: daiExampleAbi as Abi,
   };
 
+  const { provider } = configureChains([mainnet], [publicProvider()]);
+
   sveeeth({
     autoConnect: true,
-    ...configureChains([mainnet], [publicProvider()]),
+    provider,
   });
 
   const dai = contract(daiConfig);

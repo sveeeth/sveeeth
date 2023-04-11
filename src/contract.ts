@@ -3,7 +3,6 @@ import {
   fetchSigner,
   getContract,
   Signer,
-  GetContractArgs,
   GetContractResult,
   watchContractEvent,
   WatchContractEventCallback,
@@ -48,7 +47,7 @@ import { addressOrEns, getAbiFunction } from "./utils";
  * </script>
  * ```
  */
-export const contract = <TAbi extends Abi>(contractConfig: GetContractArgs<TAbi>) => {
+export const contract = <TAbi extends Abi>(contractConfig: { address: string; abi: TAbi }) => {
   // Setup all the things
   const provider = getProvider();
   const contractInstance = getContract<TAbi>({ ...contractConfig, signerOrProvider: provider });
@@ -70,7 +69,9 @@ export const contract = <TAbi extends Abi>(contractConfig: GetContractArgs<TAbi>
         const fn = getAbiFunction(contractConfig.abi, key);
         const parsedArgs = await Promise.all(
           args.map(async (arg: any, index: number) =>
-            fn?.inputs[index].type === "address" ? await addressOrEns(arg) : arg
+            fn?.type === "function" && fn?.inputs[index].type === "address"
+              ? await addressOrEns(arg)
+              : arg
           )
         );
 

@@ -1,5 +1,6 @@
+import { Abi } from "abitype";
 import { Address, fetchEnsAddress, fetchEnsAvatar, fetchEnsName } from "@wagmi/core";
-import { Abi, AbiFunction } from "abitype";
+
 import { Nullable } from "./types";
 
 /**
@@ -29,8 +30,8 @@ export const addressOrEns = async (addressOrEns: string): Promise<string | null>
  * @returns The function in the ABI that matches the given name, or undefined if no
  *          such function is found.
  */
-export const getAbiFunction = (abi: Abi, name: string): AbiFunction | undefined => {
-  return abi.find((fn) => fn.type === "function" && fn.name === name) as AbiFunction | undefined;
+export const getAbiFunction = (abi: Abi, name: String) => {
+  return abi.find((fn) => fn.type === "function" && fn.name === name);
 };
 
 export type FetchEnsDataArgs = {

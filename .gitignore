@@ -1,2 +1,7 @@
 dist/
 node_modules/
+# Generated file. Do not edit directly.
+connectors/**
+chains/**
+providers/**
+utils/**
