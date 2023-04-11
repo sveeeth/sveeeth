@@ -3,7 +3,6 @@ import {
   fetchSigner,
   getContract,
   Signer,
-  GetContractArgs,
   GetContractResult,
   watchContractEvent,
   WatchContractEventCallback,
@@ -70,7 +69,9 @@ export const contract = <TAbi extends Abi>(contractConfig: { address: string; ab
         const fn = getAbiFunction(contractConfig.abi, key);
         const parsedArgs = await Promise.all(
           args.map(async (arg: any, index: number) =>
-            fn?.inputs[index].type === "address" ? await addressOrEns(arg) : arg
+            fn?.type === "function" && fn?.inputs[index].type === "address"
+              ? await addressOrEns(arg)
+              : arg
           )
         );
 
