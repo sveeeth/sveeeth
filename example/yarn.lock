@@ -1459,11 +1459,6 @@ abitype@^0.3.0:
   resolved "https://registry.yarnpkg.com/abitype/-/abitype-0.3.0.tgz#75150e337d88cc0b2423ed0d3fc36935f139d04c"
   integrity sha512-0YokyAV4hKMcy97Pl+6QgZBlBdZJN2llslOs7kiFY+cu7kMlVXDBpxMExfv0krzBCQt2t7hNovpQ3y/zvEm18A==
 
-abitype@^0.7.1:
-  version "0.7.1"
-  resolved "https://registry.yarnpkg.com/abitype/-/abitype-0.7.1.tgz#16db20abe67de80f6183cf75f3de1ff86453b745"
-  integrity sha512-VBkRHTDZf9Myaek/dO3yMmOzB/y2s3Zo6nVU7yaw1G+TvCHAjwaJzNGN9yo4K5D8bU/VZXKP1EJpRhFr862PlQ==
-
 acorn-walk@^8.1.1:
   version "8.2.0"
   resolved "https://registry.yarnpkg.com/acorn-walk/-/acorn-walk-8.2.0.tgz#741210f2e2426454508853a2f44d0ab83b7f69c1"
@@ -3352,12 +3347,11 @@ supports-preserve-symlinks-flag@^1.0.0:
   resolved "https://registry.yarnpkg.com/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz#6eda4bd344a3c94aea376d4cc31bc77311039e09"
   integrity sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==
 
-sveeeth@0.0.1-beta.8:
-  version "0.0.1-beta.8"
-  resolved "https://registry.yarnpkg.com/sveeeth/-/sveeeth-0.0.1-beta.8.tgz#d15998e8d49b76b49711a19f3dbdccaa199a0b4b"
-  integrity sha512-xQjkQdBqiCL2hmiRgENjM6Zk2eBvmjaypdRknuj1TN0+SIaffS0/E2veNio7Ptajab2ZrES/sFb5G+hg5/yRwg==
+sveeeth@0.0.1-beta.9:
+  version "0.0.1-beta.9"
+  resolved "https://registry.yarnpkg.com/sveeeth/-/sveeeth-0.0.1-beta.9.tgz#2bb1443e5c0bb6d854794c241c5bd5e5ce3a55cf"
+  integrity sha512-HmkHeMxjp6Zga91UGoTFdjL3t1mKjW9v7xzAbgg3J0ZbdMe+OQMopy9UQwwmo/pB7p3Fnx1Pws2QdYXd0Slo5A==
   dependencies:
-    abitype "^0.7.1"
     svelte "^3.58.0"
     typescript "^5.0.3"
 
