@@ -10,11 +10,11 @@
     contract,
     multicall,
     createSigner,
-  } from "../../../../sveeeth";
-  import { mainnet } from "../../../../sveeeth/dist/chains";
-  import { publicProvider } from "../../../../sveeeth/dist/providers";
-  import { InjectedConnector } from "../../../../sveeeth/dist/connectors";
-  import { fetchEnsData } from "../../../../sveeeth/dist/utils";
+  } from "sveeeth";
+  import { mainnet } from "sveeeth/dist/chains";
+  import { publicProvider } from "sveeeth/dist/providers";
+  import { InjectedConnector } from "sveeeth/dist/connectors";
+  import { fetchEnsData } from "sveeeth/dist/utils";
 
   import daiExampleAbi from "../abis/erc20.json";
 

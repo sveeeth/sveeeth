@@ -3,7 +3,7 @@
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "description": "A viem wrapper built for Svelte",
-  "version": "0.0.1-beta.2",
+  "version": "0.0.1-beta.4",
   "scripts": {
     "build": "tsup --dts --format esm,cjs",
     "build:watch": "tsup --dts --format esm,cjs --watch",
