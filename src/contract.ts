@@ -48,7 +48,7 @@ import { addressOrEns, getAbiFunction } from "./utils";
  * </script>
  * ```
  */
-export const contract = <TAbi extends Abi>(contractConfig: GetContractArgs<TAbi>) => {
+export const contract = <TAbi extends Abi>(contractConfig: { address: string; abi: TAbi }) => {
   // Setup all the things
   const provider = getProvider();
   const contractInstance = getContract<TAbi>({ ...contractConfig, signerOrProvider: provider });
