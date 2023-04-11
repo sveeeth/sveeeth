@@ -30,24 +30,25 @@ export const multicall = <T extends Abi>(contractConfig: GetContractArgs<T>) => 
   const calls: { functionName: string; args: any[]; address: Address; abi: Abi }[] = [];
 
   const execute = async () => {
-    const result = await wagmiMulticall({ contracts: calls });
-    return result.reduce(
-      (acc: object, res: unknown, i: number) => ({ ...acc, [calls[i].functionName]: res }),
-      {}
-    );
+    return await wagmiMulticall({ contracts: calls });
   };
 
-  const ret = (call: any) => ({ calls, execute, call });
-
-  const call = (functionName: string, args: any[]) => {
+  const call = (functionName: string, args?: any[]) => {
     calls.push({
       address: contractConfig.address as Address,
       abi: contractConfig.abi as Abi,
       functionName,
-      args,
+      args: args || [],
     });
-    return ret(call);
+    return { calls, call, execute };
   };
 
-  return ret(call);
+  return {
+    calls,
+    execute,
+    call: (functionName: string, args: any[]) => {
+      calls.length = 0;
+      return call(functionName, args);
+    },
+  };
 };

@@ -31,7 +31,7 @@
 
   const daiMulticall = multicall(daiConfig);
 
-  const daiMulticallCal = daiMulticall
+  $: daiMulticallCal = daiMulticall
     .call("balanceOf", [$account.address])
     .call("totalSupply")
     .call("name")
@@ -87,9 +87,9 @@
     <p>Loading...</p>
   {:then result}
     <pre>{JSON.stringify(result, null, 2)}</pre>
-    <p>Total supply: {result.totalSupply}</p>
-    <p>Name: {result.name}</p>
-    <p>Symbol: {result.symbol}</p>
+    <p>Total supply: {result[1]}</p>
+    <p>Name: {result[2]}</p>
+    <p>Symbol: {result[3]}</p>
   {/await}
 {/if}
 
