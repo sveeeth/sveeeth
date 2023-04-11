@@ -77,25 +77,26 @@
   {/await}
 {/if}
 
-<hr />
-
 <!---------------------------------------------------------
   | Signing
 ----------------------------------------------------------->
-<h2>Signing</h2>
+{#if $account.isConnected}
+  <hr />
+  <h2>Signing</h2>
 
-{#if $signer.isLoading}
-  <p>Loading...</p>
-{:else}
-  <p>Message to sign:</p>
-  <input bind:value={messageToSign} placeholder="Enter a message" />
-  <button on:click={signMessage}>Sign message</button>
-{/if}
+  {#if $signer.isLoading}
+    <p>Loading...</p>
+  {:else}
+    <p>Message to sign:</p>
+    <input bind:value={messageToSign} placeholder="Enter a message" />
+    <button on:click={signMessage}>Sign message</button>
+  {/if}
 
-{#if $signer.error}
-  <p>Error: {$signer.error}</p>
-{:else if $signer.data}
-  <p>Signed: {$signer.data}</p>
+  {#if $signer.error}
+    <p>Error: {$signer.error}</p>
+  {:else if $signer.data}
+    <p>Signed: {$signer.data}</p>
+  {/if}
 {/if}
 
 <hr />
