@@ -8,6 +8,7 @@
     account,
     configureChains,
     contract,
+    multicall,
     createSigner,
   } from "../../../../sveeeth";
   import { mainnet } from "../../../../sveeeth/dist/chains";
@@ -17,17 +18,25 @@
 
   import daiExampleAbi from "../abis/erc20.json";
 
-  const DAI_CONTRACT_ADDRESS = "0x6b175474e89094c44da98b954eedeac495271d0f";
+  const daiConfig = {
+    address: "0x6b175474e89094c44da98b954eedeac495271d0f",
+    abi: daiExampleAbi as Abi,
+  };
 
   sveeeth({
     autoConnect: true,
     ...configureChains([mainnet], [publicProvider()]),
   });
 
-  const dai = contract({
-    address: DAI_CONTRACT_ADDRESS,
-    abi: daiExampleAbi as Abi,
-  });
+  const dai = contract(daiConfig);
+
+  const daiMulticall = multicall(daiConfig);
+
+  $: daiMulticallCal = daiMulticall
+    .call("balanceOf", [$account.address])
+    .call("totalSupply")
+    .call("name")
+    .call("symbol");
 
   let messageToSign: string;
   const signer = createSigner();
@@ -59,6 +68,7 @@
   <!--------------------------------------------------------- 
     | ENS Data 
   ----------------------------------------------------------->
+  <h3>ENS Data</h3>
   {#await fetchEnsData($account)}
     <p>Loading...</p>
   {:then { name, avatar }}
@@ -70,10 +80,24 @@
   <!--------------------------------------------------------- 
     | DAI Balance 
   ----------------------------------------------------------->
+  <h3>DAI Balance</h3>
   {#await $account.address && dai.balanceOf($account.address)}
     <p>Loading...</p>
   {:then balance}
     <p>Balance: {balance} DAI</p>
+  {/await}
+
+  <!---------------------------------------------------------
+    | DAI Multicall
+  ----------------------------------------------------------->
+  <h3>Multicall</h3>
+  {#await $account.address && daiMulticallCal.execute()}
+    <p>Loading...</p>
+  {:then result}
+    <pre>{JSON.stringify(result, null, 2)}</pre>
+    <p>Total supply: {result[1]}</p>
+    <p>Name: {result[2]}</p>
+    <p>Symbol: {result[3]}</p>
   {/await}
 {/if}
 
@@ -114,5 +138,11 @@
     height: 100px;
     border: 1px solid black;
     border-radius: 50%;
+  }
+
+  pre {
+    background: #f2f2f2;
+    padding: 8px;
+    border: 1px solid black;
   }
 </style>
