@@ -12,6 +12,7 @@
 export { configureChains, fetchEnsName, fetchEnsAvatar } from "@wagmi/core";
 export * from "./multicall";
 export * from "./contract";
+export * from "./signer";
 
 import {
   createClient,

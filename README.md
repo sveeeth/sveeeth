@@ -25,8 +25,9 @@ import { mainnet, goerli, ... } from "sveeeth/chains";
   - [x] Add edge case support for functions where the ENS should be sent raw (unfetched)
   - [ ] Reactive fetching of connected account ens data
 - [x] **multicall:** Add multicall support
-- [ ] **signing:** Add signing and the typed data signing thing
-- [ ] **contract events:** Extend the return from the `contract(...)` to support event listeners
+- [x] **signing:** Add message signing
+  - [ ] Support for signing typed data
+- [x] **contract events:** Extend the return from the `contract(...)` to support event listeners
   - Something like `contract(...).events.EventName.watch(() => void)` could be interesting
 - [x] Re-export all the wagmi/core utils and constants
 
@@ -86,7 +87,7 @@ An ENS name can be passed to a function in place of an address and it will be au
 
 Switch to the specified network.
 
-## Stores
+## Global stores
 
 ### `account`
 
@@ -115,4 +116,32 @@ Store that has the network details in it.
   import { network } from "sveeeth";
   $: ({ chain, chains } = $network);
 </script>
+```
+
+## Utility stores
+
+### `createSigner`
+
+Signer store that can be used to sign messages with the connected account. Object contains:
+
+`{ data: string | null, error: any, isLoading: boolean }`
+
+```svelte
+<script>
+  import { createSigner } from "sveeeth";
+  
+  const signer = createSigner();
+  
+  const signMessage = async () => {
+    await signer.sign({ message: "test message" });
+  }
+</script>
+
+{#if $signer.isLoading}
+  <p>Loading...</p>
+{:else if $signer.data}
+  <p>Signed data: {$signer.data}</p>
+{:else}
+  <button on:click={signMessage}>Sign</button>
+{/if}
 ```
