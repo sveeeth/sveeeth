@@ -26,7 +26,7 @@ import { mainnet, goerli, ... } from "sveeeth/chains";
   - [ ] Reactive fetching of connected account ens data
 - [ ] **multicall:** Add multicall support
 - [ ] **signing:** Add signing and the typed data signing thing
-- [ ] **contract events:** Extend the return from the `contract(...)` to support event listeners
+- [x] **contract events:** Extend the return from the `contract(...)` to support event listeners
   - Something like `contract(...).events.EventName.watch(() => void)` could be interesting
 - [x] Re-export all the wagmi/core utils and constants
 
