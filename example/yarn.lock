@@ -736,10 +736,10 @@ supports-preserve-symlinks-flag@^1.0.0:
   resolved "https://registry.yarnpkg.com/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz#6eda4bd344a3c94aea376d4cc31bc77311039e09"
   integrity sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==
 
-sveeeth@0.0.1-beta.4:
-  version "0.0.1-beta.4"
-  resolved "https://registry.yarnpkg.com/sveeeth/-/sveeeth-0.0.1-beta.4.tgz#7e81bb349900d6caa83e375c2737ec931e17aa96"
-  integrity sha512-wpL/Sn4zPcEy35drz0EaoY5N0m+C8fi7Dcy/zlS0rLexYbI/wkKSvpb8avabThX/RkOYGkgff+8pGn4vZcSkUA==
+sveeeth@0.0.1-beta.7:
+  version "0.0.1-beta.7"
+  resolved "https://registry.yarnpkg.com/sveeeth/-/sveeeth-0.0.1-beta.7.tgz#30303e10ad927f1fab2fde7a1a196549fde11f82"
+  integrity sha512-Hy79POOWc6k/XJRcHLdWoR5GedxlmsSnPSbgPEfRWEJl4U/2/+X9Niiuo2ywfciKJlvruc+kPk0N1po/tsEkow==
   dependencies:
     abitype "^0.7.1"
     svelte "^3.58.0"
