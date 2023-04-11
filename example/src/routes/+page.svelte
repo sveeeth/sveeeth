@@ -8,6 +8,7 @@
     account,
     configureChains,
     contract,
+    createSigner,
   } from "../../../../sveeeth";
   import { mainnet } from "../../../../sveeeth/dist/chains";
   import { publicProvider } from "../../../../sveeeth/dist/providers";
@@ -27,6 +28,13 @@
     address: DAI_CONTRACT_ADDRESS,
     abi: daiExampleAbi as Abi,
   });
+
+  let messageToSign: string;
+  const signer = createSigner();
+
+  const signMessage = async () => {
+    await signer.sign({ message: messageToSign });
+  };
 </script>
 
 <h1>Sveeeth Example</h1>
@@ -67,6 +75,28 @@
   {:then balance}
     <p>Balance: {balance} DAI</p>
   {/await}
+{/if}
+
+<!---------------------------------------------------------
+  | Signing
+----------------------------------------------------------->
+{#if $account.isConnected}
+  <hr />
+  <h2>Signing</h2>
+
+  {#if $signer.isLoading}
+    <p>Loading...</p>
+  {:else}
+    <p>Message to sign:</p>
+    <input bind:value={messageToSign} placeholder="Enter a message" />
+    <button on:click={signMessage}>Sign message</button>
+  {/if}
+
+  {#if $signer.error}
+    <p>Error: {$signer.error}</p>
+  {:else if $signer.data}
+    <p>Signed: {$signer.data}</p>
+  {/if}
 {/if}
 
 <hr />
