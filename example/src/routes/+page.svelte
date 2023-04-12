@@ -17,22 +17,25 @@
     autoConnect: true,
     provider,
   });
+
+  const components = [
+    NetworkDetails,
+    EnsData,
+    DaiBalance,
+    Multicall,
+    Signing,
+  ];
 </script>
 
 <h1>Sveeeth Example</h1>
 <hr />
+
 <AccountConnect />
-<hr />
-<NetworkDetails />
 <hr />
 
 {#if $account.isConnected}
-  <EnsData />
-  <hr />
-  <DaiBalance />
-  <hr />
-  <Multicall />
-  <hr />
-  <Signing />
-  <hr />
+  {#each components as Component}
+    <Component />
+    <hr />
+  {/each}
 {/if}
