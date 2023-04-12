@@ -30,7 +30,7 @@ export const addressOrEns = async (addressOrEns: string): Promise<string | null>
  * @returns The function in the ABI that matches the given name, or undefined if no
  *          such function is found.
  */
-export const getAbiFunction = (abi: Abi, name: String) => {
+export const getAbiFunction = (abi: Abi, name: string) => {
   return abi.find((fn) => fn.type === "function" && fn.name === name);
 };
 

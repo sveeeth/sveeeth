@@ -1,27 +1,15 @@
 <script lang="ts">
-  import type { Abi } from "abitype";
-
-  import sveeeth, {
-    disconnect,
-    connect,
-    network,
-    account,
-    configureChains,
-    contract,
-    multicall,
-    createSigner,
-  } from "sveeeth";
+  import sveeeth, { account, configureChains, } from "sveeeth";
   import { mainnet } from "sveeeth/chains";
   import { publicProvider } from "sveeeth/providers";
-  import { InjectedConnector } from "sveeeth/connectors";
-  import { fetchEnsData } from "sveeeth/utils";
-
-  import daiExampleAbi from "../abis/erc20.json";
-
-  const daiConfig = {
-    address: "0x6b175474e89094c44da98b954eedeac495271d0f",
-    abi: daiExampleAbi as Abi,
-  };
+  import {
+    AccountConnect,
+    DaiBalance,
+    EnsData,
+    Multicall,
+    NetworkDetails,
+    Signing
+  } from "../components";
 
   const { provider } = configureChains([mainnet], [publicProvider()]);
 
@@ -30,121 +18,24 @@
     provider,
   });
 
-  const dai = contract(daiConfig);
-
-  const daiMulticall = multicall(daiConfig);
-
-  $: daiMulticallCal = daiMulticall
-    .call("balanceOf", [$account.address])
-    .call("totalSupply")
-    .call("name")
-    .call("symbol");
-
-  let messageToSign: string;
-  const signer = createSigner();
-
-  const signMessage = async () => {
-    await signer.sign({ message: messageToSign });
-  };
+  const components = [
+    NetworkDetails,
+    EnsData,
+    DaiBalance,
+    Multicall,
+    Signing,
+  ];
 </script>
 
 <h1>Sveeeth Example</h1>
-
 <hr />
 
-<h2>Account</h2>
-{#if !$account.isConnected}
-  <!--------------------------------------------------------- 
-    | Conntect 
-  ----------------------------------------------------------->
-  <button on:click={() => connect({ connector: new InjectedConnector() })}>Connect</button>
-{:else}
-  <!--------------------------------------------------------- 
-    | Disconntect 
-  ----------------------------------------------------------->
-  <p>
-    address: {$account.address}
-    <button on:click={disconnect}>Disconnect</button>
-  </p>
+<AccountConnect />
+<hr />
 
-  <!--------------------------------------------------------- 
-    | ENS Data 
-  ----------------------------------------------------------->
-  <h3>ENS Data</h3>
-  {#await fetchEnsData($account)}
-    <p>Loading...</p>
-  {:then { name, avatar }}
-    <p>Name: {name}</p>
-    <p>Avatar: {avatar}</p>
-    <img class="avatar" src={avatar} alt="avatar" hidden={!avatar} />
-  {/await}
-
-  <!--------------------------------------------------------- 
-    | DAI Balance 
-  ----------------------------------------------------------->
-  <h3>DAI Balance</h3>
-  {#await $account.address && dai.balanceOf($account.address)}
-    <p>Loading...</p>
-  {:then balance}
-    <p>Balance: {balance} DAI</p>
-  {/await}
-
-  <!---------------------------------------------------------
-    | DAI Multicall
-  ----------------------------------------------------------->
-  <h3>Multicall</h3>
-  {#await $account.address && daiMulticallCal.execute()}
-    <p>Loading...</p>
-  {:then result}
-    <pre>{JSON.stringify(result, null, 2)}</pre>
-    <p>Total supply: {result[1]}</p>
-    <p>Name: {result[2]}</p>
-    <p>Symbol: {result[3]}</p>
-  {/await}
-{/if}
-
-<!---------------------------------------------------------
-  | Signing
------------------------------------------------------------>
 {#if $account.isConnected}
-  <hr />
-  <h2>Signing</h2>
-
-  {#if $signer.isLoading}
-    <p>Loading...</p>
-  {:else}
-    <p>Message to sign:</p>
-    <input bind:value={messageToSign} placeholder="Enter a message" />
-    <button on:click={signMessage}>Sign message</button>
-  {/if}
-
-  {#if $signer.error}
-    <p>Error: {$signer.error}</p>
-  {:else if $signer.data}
-    <p>Signed: {$signer.data}</p>
-  {/if}
+  {#each components as Component}
+    <Component />
+    <hr />
+  {/each}
 {/if}
-
-<hr />
-
-<!--------------------------------------------------------- 
-  | Network 
------------------------------------------------------------>
-<h2>Network</h2>
-<p>chain ID: {$network.chain?.id}</p>
-<p>Network name: {$network.chain?.name}</p>
-
-<style>
-  .avatar {
-    width: 100px;
-    height: 100px;
-    border: 1px solid black;
-    border-radius: 50%;
-  }
-
-  pre {
-    background: #f2f2f2;
-    padding: 8px;
-    border: 1px solid black;
-  }
-</style>
