@@ -10,7 +10,19 @@ import { Metamask, Walletconnect, ... } from "sveeeth/connectors";
 import { mainnet, goerli, ... } from "sveeeth/chains";
 ```
 
-# 🚗 Roadmap
+For examples and code snippets, check out [the example project](https://github.com/sveeeth/sveeeth/tree/master/example).
+
+## Installation
+
+Install `sveeeth` and its `@wagmi/core` dependency.
+
+```bash
+yarn add sveeeth @wagmi/core
+
+npm install sveeeth @wagmi/core
+```
+
+## 🚗 Roadmap
 
 - [x] **connect:** Connect to wallet
 - [x] **disconnect:** Disconnect from wallet
@@ -145,3 +157,9 @@ Signer store that can be used to sign messages with the connected account. Objec
   <button on:click={signMessage}>Sign</button>
 {/if}
 ```
+
+## FAQ
+
+**Q)** Is it pronounced Sveeeth or Sveeth?
+
+**A)** Yes.
