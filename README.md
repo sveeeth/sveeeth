@@ -41,7 +41,6 @@ npm install sveeeth @wagmi/core
   - [ ] Support for signing typed data
 - [x] **contract events:** Extend the return from the `contract(...)` to support event listeners
   - Something like `contract(...).events.EventName.watch(() => void)` could be interesting
-- [x] Re-export all the wagmi/core utils and constants
 
 # 📕 Docs
 
