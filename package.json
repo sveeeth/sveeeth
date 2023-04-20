@@ -15,7 +15,8 @@
     "lint:fix": "eslint . --fix",
     "prepare": "npm run build",
     "yalc:publish": "yalc publish",
-    "yalc:link": "cd example && yalc link sveeeth"
+    "yalc:link": "cd example && yalc link sveeeth",
+    "yalc:refresh": "yarn yalc:publish && yarn yalc:link"
   },
   "devDependencies": {
     "@types/dedent": "^0.7.0",
