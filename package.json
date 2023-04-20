@@ -8,7 +8,7 @@
   "scripts": {
     "build": "tsup",
     "build:watch": "tsup --watch",
-    "clean": "rimraf dist",
+    "clean": "rimraf dist chains connectors providers utils",
     "format:check": "prettier --check src/",
     "format": "prettier --write src/",
     "lint": "eslint .",
