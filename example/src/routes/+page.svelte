@@ -33,7 +33,7 @@
 <AccountConnect />
 <hr />
 
-{#if $account.isConnected}
+{#if $account.status === "connected"}
   {#each components as Component}
     <Component />
     <hr />
