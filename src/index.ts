@@ -44,11 +44,11 @@ export const disconnect = () => wagmiDisconnect();
  * Account store
  */
 const accountStore = writable<Account>({
-  address: null,
-  isConnected: null,
-  isReconnecting: null,
-  isDisconnected: null,
-  status: null,
+  address: "0x0000000000000000000000000000000000000000",
+  isConnected: false,
+  isReconnecting: false,
+  isDisconnected: false,
+  status: "disconnected",
 });
 
 /**
