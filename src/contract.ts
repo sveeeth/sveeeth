@@ -8,13 +8,21 @@ import {
   WatchContractEventCallback,
 } from "@wagmi/core";
 import { Abi, Address } from "abitype";
-import { writable } from "svelte/store";
+import { Readable, writable } from "svelte/store";
 
 import { addressOrEns, getAbiFunction } from "./utils";
 
+interface ContractStore {
+  isLoading: boolean;
+}
+
+export type Contract = Readable<ContractStore> & {
+  events: { [key: string]: () => void };
+};
+
 /**
  * Contract store
- * This contract returns a svelte store mixed with an object containing
+ * This contract returns a readable svelte store mixed with an object containing
  * ethers Contract["functions"]. So it can be consumed with autosubscribers
  * and update as a normal svelte store but can also call contract functions
  *
@@ -47,13 +55,16 @@ import { addressOrEns, getAbiFunction } from "./utils";
  * </script>
  * ```
  */
-export const contract = <TAbi extends Abi>(contractConfig: { address: string; abi: TAbi }) => {
+export const contract = <TAbi extends Abi>(contractConfig: {
+  address: string;
+  abi: TAbi;
+}): Contract => {
   // Setup all the things
   const provider = getProvider();
   const contractInstance = getContract<TAbi>({ ...contractConfig, signerOrProvider: provider });
-  const store = writable({ isLoading: false });
+  const { subscribe, update } = writable<ContractStore>({ isLoading: false });
 
-  const setIsLoading = (isLoading: boolean) => store.update((x) => ({ ...x, isLoading }));
+  const setIsLoading = (isLoading: boolean) => update((x) => ({ ...x, isLoading }));
 
   // Loop through each key of the functions property and return their
   // associated contract instance value, wrapped in a shim that updates
@@ -101,6 +112,5 @@ export const contract = <TAbi extends Abi>(contractConfig: { address: string; ab
     {}
   );
 
-  // Return the store/contract object
-  return { ...store, ...functions, events };
+  return { subscribe, ...functions, events };
 };
