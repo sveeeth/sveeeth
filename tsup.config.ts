@@ -100,10 +100,10 @@ async function generateProxyPackages(exports: Exports) {
   await fs.outputFile(
     ".gitignore",
     dedent`
+    # Generated file. Do not edit directly, edit within tsup.config.ts
     dist/
     node_modules/
-    # Generated file. Do not edit directly.
-    ${ignorePaths.join("/**\n")}/**
+    ${ignorePaths.join("/\n")}/
   `
   );
 }

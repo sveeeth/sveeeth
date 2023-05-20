@@ -8,19 +8,24 @@
   "scripts": {
     "build": "tsup",
     "build:watch": "tsup --watch",
-    "clean": "rimraf dist",
+    "clean": "rimraf dist chains connectors providers utils",
     "format:check": "prettier --check src/",
     "format": "prettier --write src/",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "yalc:publish": "yalc publish",
+    "yalc:link": "cd example && yalc link sveeeth",
+    "yalc:refresh": "yarn yalc:publish && yarn yalc:link"
   },
   "devDependencies": {
+    "@types/dedent": "^0.7.0",
+    "@types/fs-extra": "^11.0.1",
     "@typescript-eslint/eslint-plugin": "^5.58.0",
     "@typescript-eslint/parser": "^5.58.0",
-    "eslint": "^8.38.0",
     "@wagmi/core": "^0.10.9",
     "dedent": "^0.7.0",
+    "eslint": "^8.38.0",
     "fs-extra": "^11.1.1",
     "prettier": "^2.8.7",
     "rimraf": "^4.4.1",
