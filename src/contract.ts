@@ -2,7 +2,6 @@ import {
   getProvider,
   fetchSigner,
   getContract,
-  Signer,
   GetContractResult,
   watchContractEvent,
   WatchContractEventCallback,
@@ -52,7 +51,6 @@ export const contract = <TAbi extends Abi>(contractConfig: { address: string; ab
   const provider = getProvider();
   const contractInstance = getContract<TAbi>({ ...contractConfig, signerOrProvider: provider });
   const store = writable({ isLoading: false });
-
   const setIsLoading = (isLoading: boolean) => store.update((x) => ({ ...x, isLoading }));
 
   // Loop through each key of the functions property and return their
@@ -76,7 +74,11 @@ export const contract = <TAbi extends Abi>(contractConfig: { address: string; ab
         );
 
         const signer = await fetchSigner();
-        const ret = await contractInstance.connect(signer as Signer)[key](...parsedArgs);
+        if (!signer) {
+          throw new Error("account must be connected when calling a contract");
+        }
+
+        const ret = await contractInstance.connect(signer)[key](...parsedArgs);
 
         setIsLoading(false);
         return ret;
