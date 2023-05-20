@@ -1,5 +1,6 @@
 import { Abi } from "abitype";
 import { Address, fetchEnsAddress, fetchEnsAvatar, fetchEnsName } from "@wagmi/core";
+import { mainnet } from "@wagmi/chains";
 
 import { Nullable } from "./types";
 
@@ -17,7 +18,7 @@ import { Nullable } from "./types";
  */
 export const addressOrEns = async (addressOrEns: string): Promise<string | null> => {
   return addressOrEns.endsWith(".eth")
-    ? await fetchEnsAddress({ name: addressOrEns })
+    ? await fetchEnsAddress({ chainId: mainnet.id, name: addressOrEns })
     : addressOrEns;
 };
 

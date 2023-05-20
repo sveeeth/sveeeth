@@ -2,7 +2,6 @@ import {
   getProvider,
   fetchSigner,
   getContract,
-  Signer,
   GetContractResult,
   watchContractEvent,
   WatchContractEventCallback,
@@ -87,7 +86,11 @@ export const contract = <TAbi extends Abi>(contractConfig: {
         );
 
         const signer = await fetchSigner();
-        const ret = await contractInstance.connect(signer as Signer)[key](...parsedArgs);
+        if (!signer) {
+          throw new Error("account must be connected when calling a contract");
+        }
+
+        const ret = await contractInstance.connect(signer)[key](...parsedArgs);
 
         setIsLoading(false);
         return ret;
