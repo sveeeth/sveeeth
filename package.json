@@ -36,7 +36,7 @@
     "typescript": "^5.0.3"
   },
   "peerDependencies": {
-    "@wagmi/core": "^0.10.9"
+    "@wagmi/core": "^1.0.5"
   },
   "files": [
     "/connectors",
