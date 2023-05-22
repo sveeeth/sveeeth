@@ -61,10 +61,12 @@ export const fetchEnsData = async ({
     return { name: null, avatar: null };
   }
 
-  const [name, avatar] = await Promise.all([
-    fetchEnsName({ address, chainId }),
-    fetchEnsAvatar({ address, chainId }),
-  ]);
+  const name = await fetchEnsName({ address, chainId });
+  if (!name) {
+    return { name: null, avatar: null };
+  }
+
+  const avatar = await fetchEnsAvatar({ name, chainId });
 
   return { name, avatar };
 };

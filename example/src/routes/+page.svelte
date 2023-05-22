@@ -11,11 +11,11 @@
     Signing
   } from "../components";
 
-  const { provider } = configureChains([mainnet], [publicProvider()]);
+  const { publicClient } = configureChains([mainnet], [publicProvider()]);
 
   sveeeth({
     autoConnect: true,
-    provider,
+    publicClient,
   });
 
   const components = [

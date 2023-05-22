@@ -103,6 +103,7 @@ async function generateProxyPackages(exports: Exports) {
     # Generated file. Do not edit directly, edit within tsup.config.ts
     dist/
     node_modules/
+    yarn-error.log
     ${ignorePaths.join("/\n")}/
   `
   );
