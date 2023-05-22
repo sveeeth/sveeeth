@@ -41,7 +41,7 @@ npm install sveeeth @wagmi/core
   - [ ] Reactive fetching of connected account ens data
 - [x] **multicall:** Add multicall support
 - [x] **signing:** Add message signing
-  - [ ] Support for signing typed data
+  - [x] Support for signing typed data
 
 # 📕 Docs
 
