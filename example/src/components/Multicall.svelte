@@ -16,11 +16,7 @@
 {#await $account.address && daiMulticallCal.execute()}
   <p>Loading...</p>
 {:then result}
-  <pre>{JSON.stringify(result, null, 2)}</pre>
-  <p>balanceOf: {result[0]}</p>
-  <p>totalSupply: {result[1]}</p>
-  <p>name: {result[2]}</p>
-  <p>symbol: {result[3]}</p>
+  <pre>{JSON.stringify(result, (_, v) => typeof v === 'bigint' ? `${v}n` : v, 2)}</pre>
 {/await}
 
 <style>

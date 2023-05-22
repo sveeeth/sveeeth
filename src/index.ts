@@ -15,13 +15,13 @@ export * from "./contract";
 export * from "./signer";
 
 import {
-  createClient,
+  createConfig,
   getAccount,
   getNetwork,
   watchAccount,
   watchNetwork,
-  ClientConfig,
   ConnectArgs,
+  CreateConfigParameters,
   connect as wagmiConnect,
   disconnect as wagmiDisconnect,
   switchNetwork as wagmiSwitchNetwork,
@@ -82,8 +82,8 @@ export const switchNetwork = wagmiSwitchNetwork;
  * and sets up the account and network listeners and manages
  * updating the stores.
  */
-export default (clientConfig: ClientConfig) => {
-  createClient(clientConfig);
+export default (clientConfig: CreateConfigParameters) => {
+  createConfig(clientConfig);
 
   const net = getNetwork();
   if (net) network.set(net as Network);

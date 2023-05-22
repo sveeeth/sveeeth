@@ -23,7 +23,7 @@
     "@types/fs-extra": "^11.0.1",
     "@typescript-eslint/eslint-plugin": "^5.58.0",
     "@typescript-eslint/parser": "^5.58.0",
-    "@wagmi/core": "^0.10.9",
+    "@wagmi/core": "^1.0.5",
     "dedent": "^0.7.0",
     "eslint": "^8.38.0",
     "fs-extra": "^11.1.1",
@@ -32,11 +32,12 @@
     "tsup": "^6.7.0"
   },
   "dependencies": {
+    "abitype": "^0.8.4",
     "svelte": "^3.58.0",
     "typescript": "^5.0.3"
   },
   "peerDependencies": {
-    "@wagmi/core": "^0.10.9"
+    "@wagmi/core": "^1.0.5"
   },
   "files": [
     "/connectors",
