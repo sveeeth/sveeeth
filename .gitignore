@@ -2,7 +2,7 @@
 dist/
 node_modules/
 yarn-error.log
-connectors/
-chains/
-providers/
-utils/
+/connectors/
+/chains/
+/providers/
+/utils/
