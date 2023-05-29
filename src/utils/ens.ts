@@ -1,7 +1,7 @@
-import { Address, fetchEnsAddress, fetchEnsAvatar, fetchEnsName } from "@wagmi/core";
 import { mainnet } from "@wagmi/chains";
+import { Address, fetchEnsAddress, fetchEnsAvatar, fetchEnsName } from "@wagmi/core";
 
-import { Nullable } from "../types";
+import { Nullable } from "types";
 
 export type FetchEnsDataArgs = {
   address: Address | null;

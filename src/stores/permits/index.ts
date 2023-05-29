@@ -1,7 +1,8 @@
 export * from "./createERC2612PermitStore";
 
 import { getAccount, getNetwork, readContract } from "@wagmi/core";
-import { Nullable } from "../../types";
+
+import { Nullable } from "types";
 
 export interface Domain {
   name: string;

@@ -1,6 +1,7 @@
 import { Readable, writable } from "svelte/store";
+
 import { Permitter } from "./index";
-import { ERC2612Permit, ERC2612PermitArgs, signERC2612Permit } from "../../utils"; // todo: tidy relative paths
+import { ERC2612Permit, ERC2612PermitArgs, signERC2612Permit } from "utils";
 
 export function createERC2612PermitStore(): Readable<Permitter<ERC2612Permit, ERC2612PermitArgs>> {
   const permit = async ({

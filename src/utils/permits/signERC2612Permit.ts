@@ -1,6 +1,7 @@
-import { createSigner } from "../../signer";
-import { Domain, EIP712Domain, getDomain, getNonce, getRSV, RSV } from "../../stores";
-import { MAX_INT } from "../../constants";
+import { signTypedData } from "@wagmi/core";
+
+import { MAX_INT } from "consts";
+import { Domain, EIP712Domain, getDomain, getNonce, getRSV, RSV } from "stores";
 
 export type ERC2612PermitArgs = {
   token: string | Domain;
@@ -47,7 +48,6 @@ export const signERC2612Permit = async ({
   deadline,
   nonce,
 }: ERC2612PermitArgs): Promise<ERC2612Permit | null> => {
-  const signer = createSigner();
   const tokenAddress = (token as Domain).verifyingContract || (token as string);
 
   const message: ERC2612PermitMessage = {
@@ -60,7 +60,7 @@ export const signERC2612Permit = async ({
 
   const domain = await getDomain(token);
   const typedData = createTypedERC2612Data(message, domain);
-  const permit = await signer.signTypedData(typedData);
+  const permit = await signTypedData(typedData);
 
   return { ...message, ...getRSV(permit) };
 };
