@@ -10,8 +10,8 @@
 @description A svelte wrapper around wagmi/core
 */
 export { configureChains } from "@wagmi/core";
-export * from "./multicall";
 export * from "./contract";
+export * from "./multicall";
 export * from "./signer";
 
 import {

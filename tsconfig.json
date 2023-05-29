@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "module": "esnext",
     "target": "es2021",
     "moduleResolution": "node",
@@ -12,7 +13,13 @@
     "jsx": "react-jsx",
     "outDir": "dist",
     "skipLibCheck": true,
-    "strict": true
+    "strict": true,
+    "paths": {
+      "consts": ["./src/constants.ts"],
+      "types": ["./src/types"],
+      "stores": ["./src/stores"],
+      "utils": ["./src/utils"],
+    }
   },
   "exclude": ["node_modules", "dist"]
 }
