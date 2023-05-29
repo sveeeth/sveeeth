@@ -6,3 +6,4 @@ yarn-error.log
 /chains/
 /providers/
 /utils/
+/stores/

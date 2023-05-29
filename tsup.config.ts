@@ -11,6 +11,7 @@ const entry = [
   "src/chains.ts",
   "src/providers.ts",
   "src/utils/index.ts",
+  "src/stores/index.ts",
 ];
 
 const noExport: string[] = [];

@@ -44,6 +44,7 @@
     "/chains",
     "/providers",
     "/utils",
+    "/stores",
     "/dist"
   ],
   "exports": {
@@ -66,6 +67,10 @@
     "./utils": {
       "types": "./dist/utils/index.d.ts",
       "default": "./dist/utils/index.js"
+    },
+    "./stores": {
+      "types": "./dist/stores/index.d.ts",
+      "default": "./dist/stores/index.js"
     },
     "./package.json": "./package.json"
   }
