@@ -1,3 +1,4 @@
+export * from "./createDaiPermitStore";
 export * from "./createERC2612PermitStore";
 
 import { getAccount, getNetwork, readContract } from "@wagmi/core";
