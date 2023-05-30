@@ -5,7 +5,8 @@ import {
   signTypedData as wagmiSignTypedData,
   SignTypedDataArgs,
 } from "@wagmi/core";
-import { Nullable } from "./types";
+
+import { Nullable } from "types";
 
 type Signer = {
   data: Nullable<string>;

@@ -10,7 +10,7 @@ import {
 import { Abi } from "abitype";
 import { Readable, writable } from "svelte/store";
 
-import { addressOrEns, getAbiFunction } from "./utils";
+import { addressOrEns, getAbiFunction } from "utils";
 
 interface ContractStore {
   isLoading: boolean;

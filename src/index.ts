@@ -28,7 +28,7 @@ import {
 } from "@wagmi/core";
 import { Readable, writable } from "svelte/store";
 
-import { Account, Network } from "./types";
+import { Account, Network } from "types";
 
 /**
  * Connect
