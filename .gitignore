@@ -1,7 +1,9 @@
+# Generated file. Do not edit directly, edit within tsup.config.ts
 dist/
 node_modules/
-# Generated file. Do not edit directly.
-connectors/**
-chains/**
-providers/**
-utils/**
+yarn-error.log
+/connectors/
+/chains/
+/providers/
+/utils/
+/stores/

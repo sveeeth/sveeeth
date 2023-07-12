@@ -10,18 +10,18 @@
 @description A svelte wrapper around wagmi/core
 */
 export { configureChains } from "@wagmi/core";
-export * from "./multicall";
 export * from "./contract";
+export * from "./multicall";
 export * from "./signer";
 
 import {
-  createClient,
+  createConfig,
   getAccount,
   getNetwork,
   watchAccount,
   watchNetwork,
-  ClientConfig,
   ConnectArgs,
+  CreateConfigParameters,
   connect as wagmiConnect,
   disconnect as wagmiDisconnect,
   switchNetwork as wagmiSwitchNetwork,
@@ -44,11 +44,11 @@ export const disconnect = () => wagmiDisconnect();
  * Account store
  */
 const accountStore = writable<Account>({
-  address: null,
-  isConnected: null,
-  isReconnecting: null,
-  isDisconnected: null,
-  status: null,
+  address: "0x0000000000000000000000000000000000000000",
+  isConnected: false,
+  isReconnecting: false,
+  isDisconnected: false,
+  status: "disconnected",
 });
 
 /**
@@ -82,8 +82,8 @@ export const switchNetwork = wagmiSwitchNetwork;
  * and sets up the account and network listeners and manages
  * updating the stores.
  */
-export default (clientConfig: ClientConfig) => {
-  createClient(clientConfig);
+export default (clientConfig: CreateConfigParameters) => {
+  createConfig(clientConfig);
 
   const net = getNetwork();
   if (net) network.set(net as Network);

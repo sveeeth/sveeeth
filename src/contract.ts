@@ -1,20 +1,30 @@
 import {
-  getProvider,
-  fetchSigner,
-  getContract,
-  Signer,
-  GetContractResult,
   watchContractEvent,
   WatchContractEventCallback,
+  readContract,
+  writeContract,
+  Address,
+  ReadContractConfig,
+  WriteContractUnpreparedArgs,
 } from "@wagmi/core";
-import { Abi, Address } from "abitype";
-import { writable } from "svelte/store";
+import { Abi } from "abitype";
+import { Readable, writable } from "svelte/store";
 
 import { addressOrEns, getAbiFunction } from "./utils";
 
+interface ContractStore {
+  isLoading: boolean;
+}
+
+export type Contract = Readable<ContractStore> & {
+  read: { [key: string]: () => void };
+  write: { [key: string]: () => void };
+  events: { [key: string]: () => void };
+};
+
 /**
  * Contract store
- * This contract returns a svelte store mixed with an object containing
+ * This contract returns a readable svelte store mixed with an object containing
  * ethers Contract["functions"]. So it can be consumed with autosubscribers
  * and update as a normal svelte store but can also call contract functions
  *
@@ -25,7 +35,7 @@ import { addressOrEns, getAbiFunction } from "./utils";
  *    let daiBalance;
  *    const dai = contract({ address, abi });
  *    const getDaiBalance = async (acc: Address) => {
- *      daiBalance = await dai.balanceOf(acc);
+ *      daiBalance = await dai.read.balanceOf(acc);
  *    }
  * </script>
  *
@@ -47,60 +57,99 @@ import { addressOrEns, getAbiFunction } from "./utils";
  * </script>
  * ```
  */
-export const contract = <TAbi extends Abi>(contractConfig: { address: string; abi: TAbi }) => {
-  // Setup all the things
-  const provider = getProvider();
-  const contractInstance = getContract<TAbi>({ ...contractConfig, signerOrProvider: provider });
-  const store = writable({ isLoading: false });
+export const contract = <
+  TAbi extends Abi,
+  TEventName extends string,
+  TFunctionName extends string
+>(contractConfig: {
+  address: Address;
+  abi: TAbi;
+}): Contract => {
+  const { subscribe, update } = writable<ContractStore>({ isLoading: false });
 
-  const setIsLoading = (isLoading: boolean) => store.update((x) => ({ ...x, isLoading }));
+  const setIsLoading = (isLoading: boolean) => update((x) => ({ ...x, isLoading }));
 
-  // Loop through each key of the functions property and return their
-  // associated contract instance value, wrapped in a shim that updates
-  // isLoading on the store
-  const functions: GetContractResult<TAbi>["functions"] = Object.keys(
-    contractInstance.functions
-  ).reduce(
-    (acc, key) => ({
-      ...acc,
-      [key]: async (...args: any) => {
-        setIsLoading(true);
+  const read = new Proxy(
+    {},
+    {
+      get(_, functionName: TFunctionName) {
+        return async (..._args: readonly unknown[]) => {
+          setIsLoading(true);
 
-        const fn = getAbiFunction(contractConfig.abi, key);
-        const parsedArgs = await Promise.all(
-          args.map(async (arg: any, index: number) =>
-            fn?.type === "function" && fn?.inputs[index].type === "address"
-              ? await addressOrEns(arg)
-              : arg
-          )
-        );
+          const fn = getAbiFunction(contractConfig.abi, functionName);
+          const args: readonly unknown[] = await Promise.all(
+            _args.map(async (arg: any, index: number) =>
+              fn?.type === "function" && fn?.inputs[index].type === "address"
+                ? await addressOrEns(arg)
+                : arg
+            )
+          );
 
-        const signer = await fetchSigner();
-        const ret = await contractInstance.connect(signer as Signer)[key](...parsedArgs);
+          const data = await readContract({
+            ...contractConfig,
+            functionName,
+            args,
+          } as ReadContractConfig);
 
-        setIsLoading(false);
-        return ret;
+          setIsLoading(false);
+          return data;
+        };
       },
-    }),
-    {} as GetContractResult<TAbi>["functions"]
+    }
   );
 
-  const events: GetContractResult<TAbi>["filters"] = Object.keys(contractInstance.filters).reduce(
-    (acc, key: string) => ({
-      ...acc,
-      [key]: (fn: WatchContractEventCallback<TAbi, any>) =>
-        watchContractEvent(
-          {
-            address: contractConfig.address as Address,
-            abi: contractConfig.abi,
-            eventName: key as any,
-          },
-          fn
-        ),
-    }),
-    {}
+  const write = new Proxy(
+    {},
+    {
+      get(_, functionName: TFunctionName) {
+        return async (..._args: readonly unknown[]) => {
+          setIsLoading(true);
+
+          const fn = getAbiFunction(contractConfig.abi, functionName);
+          const args: readonly unknown[] = await Promise.all(
+            _args.map(async (arg: any, index: number) =>
+              fn?.type === "function" && fn?.inputs[index].type === "address"
+                ? await addressOrEns(arg)
+                : arg
+            )
+          );
+
+          // todo: prepared write is currently broken: https://github.com/wagmi-dev/wagmi/pull/2380
+          // const config = await prepareWriteContract({
+          //   ...contractConfig,
+          //   functionName,
+          //   args,
+          // });
+
+          const data = await writeContract({
+            ...contractConfig,
+            functionName,
+            args,
+          } as WriteContractUnpreparedArgs<TAbi, TFunctionName>);
+
+          setIsLoading(false);
+          return data;
+        };
+      },
+    }
   );
 
-  // Return the store/contract object
-  return { ...store, ...functions, events };
+  const events = new Proxy(
+    {},
+    {
+      get(_, eventName: TEventName) {
+        return (fn: WatchContractEventCallback<TAbi, TEventName>) => {
+          return watchContractEvent(
+            {
+              ...contractConfig,
+              eventName,
+            },
+            (args: any[]) => fn(args[0])
+          );
+        };
+      },
+    }
+  );
+
+  return { subscribe, read, write, events };
 };

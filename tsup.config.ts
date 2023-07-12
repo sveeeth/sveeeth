@@ -10,7 +10,8 @@ const entry = [
   "src/connectors.ts",
   "src/chains.ts",
   "src/providers.ts",
-  "src/utils.ts",
+  "src/utils/index.ts",
+  "src/stores/index.ts",
 ];
 
 const noExport: string[] = [];
@@ -100,10 +101,11 @@ async function generateProxyPackages(exports: Exports) {
   await fs.outputFile(
     ".gitignore",
     dedent`
+    # Generated file. Do not edit directly, edit within tsup.config.ts
     dist/
     node_modules/
-    # Generated file. Do not edit directly.
-    ${ignorePaths.join("/**\n")}/**
+    yarn-error.log
+    /${ignorePaths.join("/\n/")}/
   `
   );
 }

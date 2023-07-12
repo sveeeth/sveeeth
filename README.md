@@ -30,17 +30,18 @@ npm install sveeeth @wagmi/core
 - [x] **account:** The connected account details
 - [x] **network:** The connected network details
 - [x] **contract:** Create a contract instance
+  - [x] Allow ENS to be passed in place of address
+  - [x] Read/write function calls
+  - [x] Listen for events
+  - [ ] Automatic transaction simulation
 - [x] **chains:** re-exports everything from wagmi/core
 - [x] **connectors:** re-exports everything from wagmi/core
-- [x] **ens:** adding ens fetching and support 
-  - [x] Allow ENS to be passed in place of address
+- [x] **ens:** adding ens fetching and support
   - [x] Add edge case support for functions where the ENS should be sent raw (unfetched)
   - [ ] Reactive fetching of connected account ens data
 - [x] **multicall:** Add multicall support
 - [x] **signing:** Add message signing
-  - [ ] Support for signing typed data
-- [x] **contract events:** Extend the return from the `contract(...)` to support event listeners
-  - Something like `contract(...).events.EventName.watch(() => void)` could be interesting
+  - [x] Support for signing typed data
 
 # 📕 Docs
 

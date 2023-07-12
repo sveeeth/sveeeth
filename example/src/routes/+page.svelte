@@ -11,11 +11,11 @@
     Signing
   } from "../components";
 
-  const { provider } = configureChains([mainnet], [publicProvider()]);
+  const { publicClient } = configureChains([mainnet], [publicProvider()]);
 
   sveeeth({
     autoConnect: true,
-    provider,
+    publicClient,
   });
 
   const components = [
@@ -33,7 +33,7 @@
 <AccountConnect />
 <hr />
 
-{#if $account.isConnected}
+{#if $account.status === "connected"}
   {#each components as Component}
     <Component />
     <hr />

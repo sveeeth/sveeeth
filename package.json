@@ -4,40 +4,47 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "description": "A wagmi/core wrapper built for Svelte",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "scripts": {
     "build": "tsup",
     "build:watch": "tsup --watch",
-    "clean": "rimraf dist",
+    "clean": "rimraf dist chains connectors providers utils",
     "format:check": "prettier --check src/",
     "format": "prettier --write src/",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "yalc:publish": "yalc publish",
+    "yalc:link": "cd example && yalc link sveeeth",
+    "yalc:refresh": "yarn yalc:publish && yarn yalc:link"
   },
   "devDependencies": {
+    "@types/dedent": "^0.7.0",
+    "@types/fs-extra": "^11.0.1",
     "@typescript-eslint/eslint-plugin": "^5.58.0",
     "@typescript-eslint/parser": "^5.58.0",
-    "eslint": "^8.38.0",
-    "@wagmi/core": "^0.10.9",
+    "@wagmi/core": "^1.0.5",
     "dedent": "^0.7.0",
+    "eslint": "^8.38.0",
     "fs-extra": "^11.1.1",
     "prettier": "^2.8.7",
     "rimraf": "^4.4.1",
     "tsup": "^6.7.0"
   },
   "dependencies": {
+    "abitype": "^0.8.4",
     "svelte": "^3.58.0",
     "typescript": "^5.0.3"
   },
   "peerDependencies": {
-    "@wagmi/core": "^0.10.9"
+    "@wagmi/core": "^1.0.5"
   },
   "files": [
     "/connectors",
     "/chains",
     "/providers",
     "/utils",
+    "/stores",
     "/dist"
   ],
   "exports": {
@@ -58,8 +65,12 @@
       "default": "./dist/providers.js"
     },
     "./utils": {
-      "types": "./dist/utils.d.ts",
-      "default": "./dist/utils.js"
+      "types": "./dist/utils/index.d.ts",
+      "default": "./dist/utils/index.js"
+    },
+    "./stores": {
+      "types": "./dist/stores/index.d.ts",
+      "default": "./dist/stores/index.js"
     },
     "./package.json": "./package.json"
   }

@@ -13,6 +13,7 @@
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/kit": "^1.5.0",
+		"eslint-plugin-svelte3": "^4.0.0",
 		"svelte": "^3.54.0",
 		"svelte-check": "^3.0.1",
 		"tslib": "^2.4.1",
@@ -21,9 +22,10 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@wagmi/core": "^0.10.9",
+		"@wagmi/core": "^1.0.5",
 		"prettier": "^2.8.7",
 		"prettier-plugin-svelte": "^2.10.0",
-		"sveeeth": "0.0.1"
+		"sveeeth": "^0.0.2",
+		"viem": "^0.3.33"
 	}
 }

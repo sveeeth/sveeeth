@@ -7,7 +7,7 @@
 
 <h3>DAI Balance</h3>
 
-{#await $account.address && dai.balanceOf($account.address)}
+{#await $account.address && dai.read.balanceOf("bbque.eth")}
   <p>Loading...</p>
 {:then balance}
   <p>Balance: {balance} DAI</p>
