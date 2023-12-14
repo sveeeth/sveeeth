@@ -5,6 +5,7 @@ export type Nullable<T> = T | null;
 export interface Account {
   address: Address;
   isConnected: boolean;
+  isConnecting: boolean;
   isReconnecting: boolean;
   isDisconnected: boolean;
   status: GetAccountResult["status"];
