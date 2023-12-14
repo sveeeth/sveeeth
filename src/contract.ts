@@ -10,7 +10,8 @@ import {
 import { Abi } from "abitype";
 import { Readable, writable } from "svelte/store";
 
-import { addressOrEns, getAbiFunction } from "./utils";
+import { addressOrEns, getAbiFunction } from "utils";
+import { InferEventName } from "viem";
 
 interface ContractStore {
   isLoading: boolean;
@@ -137,7 +138,7 @@ export const contract = <
   const events = new Proxy(
     {},
     {
-      get(_, eventName: TEventName) {
+      get(_, eventName: InferEventName<TAbi, TEventName>) {
         return (fn: WatchContractEventCallback<TAbi, TEventName>) => {
           return watchContractEvent(
             {

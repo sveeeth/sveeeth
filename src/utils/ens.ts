@@ -1,4 +1,4 @@
-import { mainnet } from "@wagmi/chains";
+import { mainnet } from "@wagmi/core/chains";
 import { Address, fetchEnsAddress, fetchEnsAvatar, fetchEnsName } from "@wagmi/core";
 
 import { Nullable } from "types";

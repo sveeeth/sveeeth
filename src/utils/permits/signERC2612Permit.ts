@@ -2,22 +2,23 @@ import { signTypedData } from "@wagmi/core";
 
 import { MAX_INT } from "consts";
 import { Domain, EIP712Domain, getDomain, getNonce, getRSV, RSV } from "stores";
+import { Address } from "abitype";
 
 export type ERC2612PermitArgs = {
-  token: string | Domain;
-  owner: string;
-  spender: string;
-  value?: string | number;
-  deadline?: number;
-  nonce?: number;
+  token: Address | Domain;
+  owner: Address;
+  spender: Address;
+  value?: bigint;
+  deadline?: bigint;
+  nonce?: bigint;
 };
 
 export interface ERC2612PermitMessage {
-  owner: string;
-  spender: string;
-  value: number | string;
-  nonce: number | string;
-  deadline: number | string;
+  owner: Address;
+  spender: Address;
+  value: bigint;
+  nonce: bigint;
+  deadline: bigint;
 }
 
 export type ERC2612Permit = ERC2612PermitMessage & RSV;
@@ -37,7 +38,7 @@ const createTypedERC2612Data = (message: ERC2612PermitMessage, domain: Domain) =
     primaryType: "Permit",
     domain,
     message,
-  };
+  } as const;
 };
 
 export const signERC2612Permit = async ({
