@@ -3,8 +3,8 @@
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "description": "A wagmi/core wrapper built for Svelte",
-  "version": "0.0.2",
+  "description": "A @wagmi/core wrapper built for Svelte",
+  "version": "0.0.3",
   "scripts": {
     "build": "tsup",
     "build:watch": "tsup --watch",
