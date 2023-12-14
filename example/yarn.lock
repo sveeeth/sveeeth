@@ -1398,6 +1398,11 @@ abitype@0.8.2:
   resolved "https://registry.yarnpkg.com/abitype/-/abitype-0.8.2.tgz#cacd330d07488a4020d84f54fc361361234b9c83"
   integrity sha512-B1ViNMGpfx/qjVQi0RTc2HEFHuR9uoCoTEkwELT5Y7pBPtBbctYijz9BK6+Kd0hQ3S70FhYTO2dWWk0QNUEXMA==
 
+abitype@^0.8.4:
+  version "0.8.11"
+  resolved "https://registry.yarnpkg.com/abitype/-/abitype-0.8.11.tgz#66e1cf2cbf46f48d0e57132d7c1c392447536cc1"
+  integrity sha512-bM4v2dKvX08sZ9IU38IN5BKmN+ZkOSd2oI4a9f0ejHYZQYV6cDr7j+d95ga0z2XHG36Y4jzoG5Z7qDqxp7fi/A==
+
 aes-js@3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/aes-js/-/aes-js-3.0.0.tgz#e21df10ad6c2053295bcbb8dab40b09dbea87e4d"
@@ -2956,11 +2961,12 @@ supports-preserve-symlinks-flag@^1.0.0:
   resolved "https://registry.yarnpkg.com/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz#6eda4bd344a3c94aea376d4cc31bc77311039e09"
   integrity sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==
 
-sveeeth@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/sveeeth/-/sveeeth-0.0.1.tgz#4b74170bac762b23caaa00a8aab02f96f02eaa30"
-  integrity sha512-RKSCweakEY0wRQ8iFxXVizfZ7OoiNZjYSOHWRlija0pckj5NlrA3tjTMNGwHcj21hSqcLq9Wxakv0sI59e+v0g==
+sveeeth@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/sveeeth/-/sveeeth-0.0.2.tgz#bea61fbc229e7391b24cafb8a1d0be7c0a45e394"
+  integrity sha512-dO9uBGd9RdyXYMY0dnaRH+HuNUhuzGehkWVhxmIky+oTbumM17xUQPmUcKgwpyLJvzKuhaDdl9NH/BxEKkppQw==
   dependencies:
+    abitype "^0.8.4"
     svelte "^3.58.0"
     typescript "^5.0.3"
 
@@ -3138,10 +3144,10 @@ viem@^0.3.33:
     isomorphic-ws "5.0.0"
     ws "8.12.0"
 
-vite@^4.2.0:
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/vite/-/vite-4.2.1.tgz#6c2eb337b0dfd80a9ded5922163b94949d7fc254"
-  integrity sha512-7MKhqdy0ISo4wnvwtqZkjke6XN4taqQ2TBaTccLIpOKv7Vp2h4Y+NpmWCnGDeSvvn45KxvWgGyb0MkHvY1vgbg==
+vite@^4.2.3:
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/vite/-/vite-4.2.3.tgz#067ada47ebd52e078d014bf1f92badda9d10564d"
+  integrity sha512-kLU+m2q0Y434Y1kCy3TchefAdtFso0ILi0dLyFV8Us3InXTU11H/B5ZTqCKIQHzSKNxVG/yEx813EA9f1imQ9A==
   dependencies:
     esbuild "^0.17.5"
     postcss "^8.4.21"
