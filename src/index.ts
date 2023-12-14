@@ -28,7 +28,7 @@ import {
 } from "@wagmi/core";
 import { Readable, writable } from "svelte/store";
 
-import { Account, Network } from "./types";
+import { Account, Network } from "types";
 
 /**
  * Connect
@@ -46,6 +46,7 @@ export const disconnect = () => wagmiDisconnect();
 const accountStore = writable<Account>({
   address: "0x0000000000000000000000000000000000000000",
   isConnected: false,
+  isConnecting: false,
   isReconnecting: false,
   isDisconnected: false,
   status: "disconnected",

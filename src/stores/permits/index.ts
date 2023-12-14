@@ -1,3 +1,5 @@
+import { Address } from "abitype";
+
 export * from "./createDaiPermitStore";
 export * from "./createERC2612PermitStore";
 
@@ -8,8 +10,8 @@ import { Nullable } from "types";
 export interface Domain {
   name: string;
   version: string;
-  chainId: number;
-  verifyingContract: string;
+  chainId: bigint;
+  verifyingContract: Address;
 }
 
 export interface RSV {
@@ -30,9 +32,9 @@ export const EIP712Domain = [
   { name: "version", type: "string" },
   { name: "chainId", type: "uint256" },
   { name: "verifyingContract", type: "address" },
-];
+] as const;
 
-export const getTokenName = async (tokenAddress: string): Promise<string> => {
+export const getTokenName = async (tokenAddress: Address): Promise<string> => {
   return await readContract({
     address: tokenAddress,
     abi: [
@@ -50,12 +52,12 @@ export const getTokenName = async (tokenAddress: string): Promise<string> => {
         stateMutability: "view",
         type: "function",
       },
-    ],
+    ] as const,
     functionName: "name",
   });
 };
 
-export const getNonce = async (tokenAddress: string): Promise<string> => {
+export const getNonce = async (tokenAddress: Address): Promise<bigint> => {
   const { address } = getAccount();
   if (!address) {
     throw new Error("you must be connected to a wallet to sign a permit");
@@ -83,14 +85,14 @@ export const getNonce = async (tokenAddress: string): Promise<string> => {
         stateMutability: "view",
         type: "function",
       },
-    ],
+    ] as const,
     functionName: "nonces",
     args: [address],
   });
 };
 
-export const getDomain = async (token: string | Domain): Promise<Domain> => {
-  if (typeof token !== "string") {
+export const getDomain = async (token: Address | Domain): Promise<Domain> => {
+  if ((token as Domain).verifyingContract) {
     return token as Domain;
   }
 
@@ -99,14 +101,14 @@ export const getDomain = async (token: string | Domain): Promise<Domain> => {
     throw new Error("you must be connected to a network to sign a permit");
   }
 
-  const tokenAddress = token as string;
+  const tokenAddress = token as Address;
 
   return {
     name: await getTokenName(tokenAddress),
     version: "1",
-    chainId: chain.id,
+    chainId: BigInt(chain.id),
     verifyingContract: tokenAddress,
-  };
+  } as const;
 };
 
 export const getRSV = (data: any): RSV => {
